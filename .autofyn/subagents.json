@@ -1,0 +1,74 @@
+[
+  {
+    "name": "problem-parser",
+    "type": "explore",
+    "description": "Formalizes the problem statement: extracts all definitions, what must be proved, implicit assumptions, and which mathematical subfield it belongs to. Call first, before any other explore agent.",
+    "model": "sonnet",
+    "tools": ["Read", "Glob", "Grep"],
+    "prompt_file": ".autofyn/subagents/problem-parser.md",
+    "needs_run_state": true
+  },
+  {
+    "name": "literature-scout",
+    "type": "explore",
+    "description": "Searches for related theorems, standard proof techniques in the relevant domain, and known partial results. Call after problem-parser to build a toolkit of applicable mathematical machinery.",
+    "model": "sonnet",
+    "tools": ["Read", "WebSearch", "WebFetch"],
+    "prompt_file": ".autofyn/subagents/literature-scout.md",
+    "needs_run_state": true
+  },
+  {
+    "name": "intuition-builder",
+    "type": "explore",
+    "description": "Explores small and degenerate cases, constructs examples, and identifies why the theorem should be true or where naive approaches fail. Call after problem-parser to surface the core difficulty before planning.",
+    "model": "opus",
+    "tools": ["Read", "Bash", "Grep"],
+    "prompt_file": ".autofyn/subagents/intuition-builder.md",
+    "needs_run_state": true
+  },
+  {
+    "name": "proof-architect",
+    "type": "plan",
+    "description": "Synthesizes all exploration reports and proposes a concrete proof strategy: technique, list of key lemmas, and a sketch of how they combine. Call after all explore agents have run.",
+    "model": "opus",
+    "tools": ["Read"],
+    "prompt_file": ".autofyn/subagents/proof-architect.md",
+    "needs_run_state": true
+  },
+  {
+    "name": "lemma-prover",
+    "type": "build",
+    "description": "Proves each lemma from the proof spec in full rigorous detail as a self-contained argument. Call after the proof-architect has produced a spec.",
+    "model": "opus",
+    "tools": ["Read", "Write", "Bash"],
+    "prompt_file": ".autofyn/subagents/lemma-prover.md",
+    "needs_run_state": true
+  },
+  {
+    "name": "proof-assembler",
+    "type": "build",
+    "description": "Takes the proven lemmas and assembles a clean, complete, well-structured final proof document. Call after lemma-prover has proved all lemmas.",
+    "model": "sonnet",
+    "tools": ["Read", "Write"],
+    "prompt_file": ".autofyn/subagents/proof-assembler.md",
+    "needs_run_state": true
+  },
+  {
+    "name": "logic-auditor",
+    "type": "review",
+    "description": "Adversarially checks every step of the proof for unjustified claims, circular reasoning, misapplied theorems, and incomplete case coverage. Primary proof reviewer.",
+    "model": "opus",
+    "tools": ["Read"],
+    "prompt_file": ".autofyn/subagents/logic-auditor.md",
+    "needs_run_state": true
+  },
+  {
+    "name": "gap-hunter",
+    "type": "review",
+    "description": "Tries to construct explicit counterexamples to each claimed intermediate step in the proof. Catches subtle gaps that logical auditing alone may miss.",
+    "model": "opus",
+    "tools": ["Read", "Bash"],
+    "prompt_file": ".autofyn/subagents/gap-hunter.md",
+    "needs_run_state": true
+  }
+]
