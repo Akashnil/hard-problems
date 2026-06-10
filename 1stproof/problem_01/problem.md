@@ -1,0 +1,3 @@
+**Problem 1:**
+
+Let $\mathbb{T}^{3}$ be the three dimensional unit size torus and let be the $\Phi_{3}^{4}$ measure on the space of distributions $\mathcal{D}^{\prime}(\mathbb{T}^{3})$. Let $\psi:\mathbb{T}^{3}\rightarrow\mathbb{R}$ be a smooth function that is not identically zero and let $T_{\psi}:\mathcal{D}^{\prime}(\mathbb{T}^{3})\rightarrow\mathcal{D}^{\prime}(\mathbb{T}^{3})$ be the shift map given by $T_{\psi}(u)=u+\psi$ (with the usual identification of smooth functions as distributions). Are the measures $\mu$ and $T_{\psi}^{*}\mu$ equivalent? Here, equivalence of measures is in the sense of having the same null sets and $T_{\psi}^{*}$ denotes the pushforward under $T_{\psi}$.

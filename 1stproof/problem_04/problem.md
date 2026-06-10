@@ -1,0 +1,3 @@
+**Problem 4:**
+
+Let $p(x)$ and $q(x)$ be two monic polynomials of degree n: $p(x)=\sum_{k=0}^{n}a_{k}x^{n-k}$ and $q(x)=\sum_{k=0}^{n}b_{k}x^{n-k}$ where $a_{0}=b_{0}=1$. Define $p\#_{n}q(x)$ to be the polynomial $(p\oplus_{n}q)(x)=\sum_{k=0}^{n}c_{k}x^{n-k}$ where the coefficients $c_{k}$ are given by the formula: $c_{k}=\sum_{i+j=k}\frac{(n-i)!(n-j)!}{n!(n-k)!}a_{i}b_{j}$ for $k=0,1,...,n$. For a monic polynomial $p(x)=\prod_{i\le n}(x-\lambda_{i})$ define $\Phi_{n}(p):=\sum_{i\le n}(\sum_{j\ne i}\frac{1}{\lambda_{i}-\lambda_{j}})^{2}$ and $\Phi_{n}(p):=\infty$ if p has a multiple root. Is it true that if $p(x)$ and $q(x)$ are monic real-rooted polynomials of degree n, then $\frac{1}{\Phi_{n}(p\oplus_{n}q)}\ge\frac{1}{\Phi_{n}(p)}+\frac{1}{\Phi_{n}(q)}?$
