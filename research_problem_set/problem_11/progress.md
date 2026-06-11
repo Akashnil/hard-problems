@@ -1,0 +1,8 @@
+# Problem 11 — Verified progress log
+
+- R1: Lemmas 0-4 VERIFIED (exact rational): conditioning=component collapse (P'∝∏_c P(copy_c)); within-copy block collapse; cross-copy identity match gives both copies P·m_T (identical); AND-amplifier b→b²/(b²+(1-b)²)<b for b<1/2 with EXACT collateral b'_j=[(1-b)b_j+(2b-1)p11]/[b²+(1-b)²] and dichotomy b'_j<b_j ⟺ Cov(x_j,x_{i*})>0; AND-tree on 2^t copies = P^{2^t}/Z.
+- R1: Prop A VERIFIED — unique-mode-0^n reduced via AND-tree with explicit m=2^t≥log((2^n-1)/β)/log(p0/M); 0 failures n=3,4. Tie-to-co-mode limitation is genuine and honestly stated.
+- R1: Prop C VERIFIED — worst coord with Cov≥0 to all others: matching {i*} (recursing on tied-max coords) strictly reduces maxbias; 0 failures (Lemma-2 copy-symmetry makes this safe).
+- R1: n=2 case — inequality (★) p11·p01<p10·p00 and γ<β VERIFIED exact (0/11745). The argument β<1/2 ⟹ p11<p00 (with p10≥p01 WLOG) is airtight.
+- R1: DISPROVEN — Prop B's STATED construction (k=2, S={(0,1)}) does NOT reduce maxbias (it collapses only copy 0; copy 1 stays at β). Correct construction: k=1 S={(0,1)} (or k=2 S={(0,1),(2,3)}); verified 0/9082. The n=2 math is right; only (k,S) was mis-stated.
+- R1: DISPROVEN — the §7 Coverage Lemma restricted to a k=2 family is FALSE. Counterexample (n=3, full support, in-hypothesis): P/217 = {000:6,001:24,010:80,011:4,100:72,101:12,110:1,111:18}, maxbias=103/217≈0.4747, has NO maxbias-reducing k=2 conditioning (exhaustive over all 203 set-partitions of P²); reduced only at k=3 (S={(0,3),(1,6),(4,7)}→≈0.4544). The construction family must allow k≥3 and permuted (not just identity) cross-copy matchings. Theorem itself appears TRUE: k≤3 sufficed in all ~2000 adversarial n=3 cases tested.
