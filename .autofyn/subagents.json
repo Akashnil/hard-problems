@@ -2,18 +2,18 @@
   {
     "name": "math-explorer",
     "type": "explore",
-    "description": "Explores an Olympiad problem: reads the statement, the knowledge base, and the problem's existing results file; reports what has been tried, what worked, what failed and why, and which techniques look promising. Call at the start of each round before any proof attempt. Does NOT attempt the proof.",
-    "model": "sonnet",
-    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "description": "Explores an optimization-constant problem: reads the canonical constants/<id>.md ledger, fetches and digests the papers behind the current record upper/lower bounds, and reports where the gap is most exploitable and which bound is the softer target. Call at the start of each round before any attempt. Does NOT attempt the improvement.",
+    "model": "opus",
+    "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
     "prompt_file": ".autofyn/subagents/math-explorer.md",
     "needs_run_state": true
   },
   {
     "name": "proof-outliner",
     "type": "plan",
-    "description": "Outlines a proof strategy for one problem: the technique/theorem to use, the proof skeleton, and the key lemmas. Produces a plan with the hard steps identified, not a finished proof. Marks 'Spec review: required' when the outline is non-trivial. Call after the explorer, once per problem per round.",
+    "description": "Surveys multiple attack angles for improving one bound: how the current record was achieved, analogous results and techniques worth borrowing, and the skeleton of each candidate line (analytic argument, explicit construction, or computational certificate). Produces a ranked set of approaches with the hard steps identified, not a single finished plan. Call after the explorer, once per problem per round.",
     "model": "opus",
-    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
     "prompt_file": ".autofyn/subagents/proof-outliner.md",
     "needs_run_state": true
   },
@@ -29,18 +29,18 @@
   {
     "name": "proof-builder",
     "type": "build",
-    "description": "Fills in a proof outline into a complete, rigorous prose proof: every step justified, every case settled, all computations shown. Writes the result to the problem's results file. Call after the outline (and its review) are ready.",
+    "description": "Turns a chosen approach into a concrete bound improvement: a rigorous analytic argument, an explicit construction, or a computational certificate built and checked with Bash. Produces the candidate improvement and its verification artifact in the problem's research folder. Call after the outline (and its review) are ready.",
     "model": "opus",
-    "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
+    "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
     "prompt_file": ".autofyn/subagents/proof-builder.md",
     "needs_run_state": true
   },
   {
     "name": "proof-reviewer",
     "type": "review",
-    "description": "Adversarially judges a candidate proof for correctness, rigor, and progress. Hunts for gaps, unproven claims, and skipped cases; decides solved/partial/unsolved and returns an APPROVE / CHANGES REQUESTED / RETHINK verdict. Call after every proof-builder attempt.",
+    "description": "Adversarially verifies a candidate bound improvement: re-runs the certificate, independently re-derives the key inequality, confirms the claimed bound actually beats the value in the canonical table, and assigns a verification level (the repo's * minimally-verified convention). Decides whether the improvement holds and returns an APPROVE / CHANGES REQUESTED / RETHINK verdict. Call after every proof-builder attempt.",
     "model": "opus",
-    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
     "prompt_file": ".autofyn/subagents/proof-reviewer.md",
     "needs_run_state": true
   }
