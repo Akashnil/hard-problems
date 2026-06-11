@@ -1,74 +1,47 @@
 [
   {
-    "name": "problem-parser",
+    "name": "math-explorer",
     "type": "explore",
-    "description": "Formalizes the problem statement: extracts all definitions, what must be proved, implicit assumptions, and which mathematical subfield it belongs to. Call first, before any other explore agent.",
+    "description": "Explores an Olympiad problem: reads the statement, the knowledge base, and the problem's existing results file; reports what has been tried, what worked, what failed and why, and which techniques look promising. Call at the start of each round before any proof attempt. Does NOT attempt the proof.",
     "model": "sonnet",
-    "tools": ["Read", "Glob", "Grep"],
-    "prompt_file": ".autofyn/subagents/problem-parser.md",
+    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "prompt_file": ".autofyn/subagents/math-explorer.md",
     "needs_run_state": true
   },
   {
-    "name": "literature-scout",
-    "type": "explore",
-    "description": "Searches for related theorems, standard proof techniques in the relevant domain, and known partial results. Call after problem-parser to build a toolkit of applicable mathematical machinery.",
-    "model": "sonnet",
-    "tools": ["Read", "WebSearch", "WebFetch"],
-    "prompt_file": ".autofyn/subagents/literature-scout.md",
-    "needs_run_state": true
-  },
-  {
-    "name": "intuition-builder",
-    "type": "explore",
-    "description": "Explores small and degenerate cases, constructs examples, and identifies why the theorem should be true or where naive approaches fail. Call after problem-parser to surface the core difficulty before planning.",
-    "model": "opus",
-    "tools": ["Read", "Bash", "Grep"],
-    "prompt_file": ".autofyn/subagents/intuition-builder.md",
-    "needs_run_state": true
-  },
-  {
-    "name": "proof-architect",
+    "name": "proof-outliner",
     "type": "plan",
-    "description": "Synthesizes all exploration reports and proposes a concrete proof strategy: technique, list of key lemmas, and a sketch of how they combine. Call after all explore agents have run.",
+    "description": "Outlines a proof strategy for one problem: the technique/theorem to use, the proof skeleton, and the key lemmas. Produces a plan with the hard steps identified, not a finished proof. Marks 'Spec review: required' when the outline is non-trivial. Call after the explorer, once per problem per round.",
     "model": "opus",
-    "tools": ["Read"],
-    "prompt_file": ".autofyn/subagents/proof-architect.md",
+    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "prompt_file": ".autofyn/subagents/proof-outliner.md",
     "needs_run_state": true
   },
   {
-    "name": "lemma-prover",
-    "type": "build",
-    "description": "Proves each lemma from the proof spec in full rigorous detail as a self-contained argument. Call after the proof-architect has produced a spec.",
-    "model": "opus",
-    "tools": ["Read", "Write", "Bash"],
-    "prompt_file": ".autofyn/subagents/lemma-prover.md",
-    "needs_run_state": true
-  },
-  {
-    "name": "proof-assembler",
-    "type": "build",
-    "description": "Takes the proven lemmas and assembles a clean, complete, well-structured final proof document. Call after lemma-prover has proved all lemmas.",
-    "model": "sonnet",
-    "tools": ["Read", "Write"],
-    "prompt_file": ".autofyn/subagents/proof-assembler.md",
-    "needs_run_state": true
-  },
-  {
-    "name": "logic-auditor",
+    "name": "outline-reviewer",
     "type": "review",
-    "description": "Adversarially checks every step of the proof for unjustified claims, circular reasoning, misapplied theorems, and incomplete case coverage. Primary proof reviewer.",
+    "description": "Reviews a proof outline BEFORE the details are filled in. Checks for the wrong technique, unjustified leaps, missing cases, and circular reasoning. Call on every outline the proof-outliner marks 'Spec review: required'.",
     "model": "opus",
-    "tools": ["Read"],
-    "prompt_file": ".autofyn/subagents/logic-auditor.md",
+    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "prompt_file": ".autofyn/subagents/outline-reviewer.md",
     "needs_run_state": true
   },
   {
-    "name": "gap-hunter",
-    "type": "review",
-    "description": "Tries to construct explicit counterexamples to each claimed intermediate step in the proof. Catches subtle gaps that logical auditing alone may miss.",
+    "name": "proof-builder",
+    "type": "build",
+    "description": "Fills in a proof outline into a complete, rigorous prose proof: every step justified, every case settled, all computations shown. Writes the result to the problem's results file. Call after the outline (and its review) are ready.",
     "model": "opus",
-    "tools": ["Read", "Bash"],
-    "prompt_file": ".autofyn/subagents/gap-hunter.md",
+    "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash"],
+    "prompt_file": ".autofyn/subagents/proof-builder.md",
+    "needs_run_state": true
+  },
+  {
+    "name": "proof-reviewer",
+    "type": "review",
+    "description": "Adversarially judges a candidate proof for correctness, rigor, and progress. Hunts for gaps, unproven claims, and skipped cases; decides solved/partial/unsolved and returns an APPROVE / CHANGES REQUESTED / RETHINK verdict. Call after every proof-builder attempt.",
+    "model": "opus",
+    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "prompt_file": ".autofyn/subagents/proof-reviewer.md",
     "needs_run_state": true
   }
 ]
