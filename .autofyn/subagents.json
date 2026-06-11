@@ -1,47 +1,47 @@
 [
   {
-    "name": "math-explorer",
+    "name": "problem-scout",
     "type": "explore",
-    "description": "Explores an optimization-constant problem: reads the canonical constants/<id>.md ledger, fetches and digests the papers behind the current record upper/lower bounds, and reports where the gap is most exploitable and which bound is the softer target. Call at the start of each round before any attempt. Does NOT attempt the improvement.",
+    "description": "Surveys a math problem from scratch: classifies it (well-known / variant / novel), digs into relevant literature when it exists, identifies the key objects and their structure, tests small cases, surfaces what makes the problem hard, and reports a concrete menu of angles for the approach-surveyor. Does NOT attempt a proof. Call once at the start of a problem or when prior approaches are exhausted and the attack must be reconsidered.",
     "model": "opus",
     "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
-    "prompt_file": ".autofyn/subagents/math-explorer.md",
+    "prompt_file": ".autofyn/subagents/problem-scout.md",
     "needs_run_state": true
   },
   {
-    "name": "proof-outliner",
+    "name": "approach-surveyor",
     "type": "plan",
-    "description": "Surveys multiple attack angles for improving one bound: how the current record was achieved, analogous results and techniques worth borrowing, and the skeleton of each candidate line (analytic argument, explicit construction, or computational certificate). Produces a ranked set of approaches with the hard steps identified, not a single finished plan. Call after the explorer, once per problem per round.",
+    "description": "Surveys multiple proof strategies for the problem assigned by the orchestrator: proposes ranked angles (direct argument, reduction to known results, extremal/probabilistic, computational verification, or counterexample search), names the hard step and its mechanism in each, and decides whether the top angle needs a pre-build review. Produces a ranked menu for the orchestrator — not a single committed plan. Call after the scout, once per problem per round.",
     "model": "opus",
     "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
-    "prompt_file": ".autofyn/subagents/proof-outliner.md",
+    "prompt_file": ".autofyn/subagents/approach-surveyor.md",
     "needs_run_state": true
   },
   {
-    "name": "outline-reviewer",
+    "name": "approach-critic",
     "type": "review",
-    "description": "Reviews a proof outline BEFORE the details are filled in. Checks for the wrong technique, unjustified leaps, missing cases, and circular reasoning. Call on every outline the proof-outliner marks 'Spec review: required'.",
+    "description": "Adversarially reviews a proof angle BEFORE the proof-builder spends compute on it. Checks that the approach actually proves the stated claim (not a weaker variant), that the hard step has a real mechanism (not a label), that no cases are missing or implicitly assumed, and that the angle is not circular or a recorded dead end. Returns APPROVE / CHANGES REQUESTED / RETHINK. Call on every angle the approach-surveyor marks 'Spec review: required'.",
     "model": "opus",
-    "tools": ["Read", "Write", "Glob", "Grep", "Bash"],
-    "prompt_file": ".autofyn/subagents/outline-reviewer.md",
+    "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
+    "prompt_file": ".autofyn/subagents/approach-critic.md",
     "needs_run_state": true
   },
   {
     "name": "proof-builder",
     "type": "build",
-    "description": "Turns a chosen approach into a concrete bound improvement: a rigorous analytic argument, an explicit construction, or a computational certificate built and checked with Bash. Produces the candidate improvement and its verification artifact in the problem's research folder. Call after the outline (and its review) are ready.",
+    "description": "Turns a chosen proof angle into a complete written argument, or advances it as far as possible and names the exact gap where it stops. Fills in every step the survey left open, closes the hard step with a full derivation or computational certificate, and covers all edge cases. Uses Bash to verify computations and small cases. Writes the proof attempt and approach record to the problem's directory. Call after the approach (and its review, if required) are ready.",
     "model": "opus",
     "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
     "prompt_file": ".autofyn/subagents/proof-builder.md",
     "needs_run_state": true
   },
   {
-    "name": "proof-reviewer",
+    "name": "proof-critic",
     "type": "review",
-    "description": "Adversarially verifies a candidate bound improvement: re-runs the certificate, independently re-derives the key inequality, confirms the claimed bound actually beats the value in the canonical table, and assigns a verification level (the repo's * minimally-verified convention). Decides whether the improvement holds and returns an APPROVE / CHANGES REQUESTED / RETHINK verdict. Call after every proof-builder attempt.",
+    "description": "Adversarially verifies a proof attempt: re-derives the hard step independently, checks every non-trivial claim, hunts for missing cases and hidden assumptions, re-runs computational checks, and attempts to construct counterexamples. Logs verified progress to the problem's progress file (sub-lemmas, base cases, partial closures, full proofs). Returns APPROVE / CHANGES REQUESTED / RETHINK. Call after every proof-builder attempt.",
     "model": "opus",
     "tools": ["Read", "Write", "Glob", "Grep", "Bash", "WebSearch", "WebFetch"],
-    "prompt_file": ".autofyn/subagents/proof-reviewer.md",
+    "prompt_file": ".autofyn/subagents/proof-critic.md",
     "needs_run_state": true
   }
 ]
