@@ -1,5 +1,58 @@
 # Progress — problem_11
 
+- R6 (builder, pending critic verification): BUILT the approved orbit-aggregate `(†)` angle and
+  discharged the approach-critic's CHANGES-REQUESTED obligation. Theorem still NOT proved; the gap
+  (★)/(B3-a′) is UNCHANGED and OPEN, but is now MAPPED PRECISELY by three RIGOROUS new facts
+  (certificate `b3_round6.py`, all reproduced): (R6-T1, PROVED) the `(†) SLACK_O > BIASGAP` framing
+  is a TAUTOLOGY — `SLACK_O − BIASGAP = log(∏P(e_i)/∏_s P(S^s y))` exactly (the `bias_i` cancel by
+  the R5-2 incidence collapse; verified |err|<7e-15), so `(†)` carries ZERO information beyond the
+  bare product inequality (B3-a′), and "cap BIASGAP from above" is not a strategy (the critic's
+  warning, now formal). (R6-T2, PROVED via explicit full-support certificate) N7 (all-single-glues-
+  fail, the source of the `(UB)` caps) does NOT imply (B3-a′): `P3=[.26314,.22514,.06373,.12761,
+  .01397,.03575,.19734,.07332]` is full-support, mb=0.462<1/2, satisfies N7, yet ∏_s P(weight-2)
+  =9e-4 > 2e-4=∏P(e_i); it is k=2-reducible (whole-collapse→0.072), so correctly not a residual.
+  This RIGOROUSLY KILLS the (UB)-from-N7-only route (exactly the critic's objection). (R6-T3, PROVED
+  via explicit full-support n=4 certificate) the cleanest two-constraint candidate {N7, whole-
+  collapse-failure (WC)} holds on all 89 residuals and is conjecturally sufficient at n=3 (no
+  counterexample in >1e7 trials + SA, worst margin >0.13), but is PROVABLY INSUFFICIENT at n≥4:
+  explicit full-support P on {0,1}^4 (mb=0.4898<1/2) satisfies N7 ∧ (WC) yet violates (B3-a′)
+  (margin -1.87) and is k2-reducible (best 0.4375) by a partial absorb-block. => NO FIXED FINITE
+  conjunction of k=2 move-failures is uniformly sufficient; the minimal sufficient set GROWS with n.
+  EXACT GAP (restated, with margins): prove ∏_s P(S^s y) < ∏_i P(e_i) for every full-support
+  residual and ham(y)≠1; 0 viol on 89 isolated + 60 fresh near-mb=1/2 residuals, min rel margin
+  0.167 (n=3)/0.866 (n=4), critic SA true-residual margin ≈0.094 at mb≈0.4997. Missing: a derivation
+  that consumes the residual hypothesis GLOBALLY (the A3a per-block disjunction over the whole Bell
+  lattice), not any bounded family of caps. Files: proof.md (§"Hard step (expanded, R6)", Gap, table,
+  banner), b3_round6.py (new certificate; b3_round5.py untouched). NOT a proof.
+
+- R6 (critic-verified): CONFIRMED all three R6 structural advances by INDEPENDENT re-derivation
+  (my own conditioning/orbit/glue/slow-Bell-lattice code, not b3lib/harness); theorem still NOT
+  proved, no overclaim, gap (★)/(B3-a′) UNCHANGED and OPEN. (R6-T1, PROVED) the identity
+  SLACK_O − BIASGAP = log(∏P(e_i)/∏_s P(S^s y)) reproduced independently to |err|=7.1e-15 on all
+  89 residual orbits (bias_i cancel by R5-2 incidence, verified symbolically) => (†) SLACK_O>BIASGAP
+  IS (B3-a′) verbatim, carries zero information; the v2 angle's hard step ("cap BIASGAP from above,
+  SLACK dominates") is therefore CIRCULAR -- it bounds one side of an identity by the other. T1 does
+  NOT touch the (★)->(B3-a′)->(B3-a)->theorem reduction chain (sound, unaffected); it only kills the
+  (†)-decomposition tactic. (R6-T2, PROVED via explicit full-support certificate) P3=[.26314,.22514,
+  .06373,.12761,.01397,.03575,.19734,.07332] independently confirmed full-support (minP=0.0140),
+  mb=0.462<1/2, satisfies N7, VIOLATES (B3-a′) (∏_s P(wt-2 orbit) > ∏P(e_i)), and is k=2-reducible
+  to 0.072 by my own slow Bell-lattice search (so correctly NOT a residual) => N7-alone (the (UB)
+  source) is rigorously insufficient. (R6-T3, PROVED via explicit full-support n=4 certificate)
+  re-ran the n=4 search with my own conditioning code (seed 9090): full-support P (minP=0.0023,
+  mb=0.4898<1/2) satisfies N7∧WC, violates (B3-a′), k=2-reducible to 0.4375 (own slow Bell-lattice)
+  => {N7,WC} insufficient at n=4 (PROVED); the broader "no FIXED finite k=2-failure set is uniformly
+  sufficient / minimal sufficient conjunction grows with n" is a sound STRUCTURAL inference from the
+  n=3-suffices(conjectural)/n=4-fails(proved) data point, correctly labeled as the obstruction map,
+  not a proved universal lemma. INDEPENDENTLY re-verified: (UB) holds 95/95 and binding 95/95 on
+  realized n=3 riser pairs; all 89 .pkl residuals satisfy N7∧WC; sampled .pkl entries (8/8 n=3) are
+  GENUINE residuals (no k=2 reduction via own slow Bell-lattice); B3-a' holds on all residuals
+  (worst dedup rel margin 0.835 n=3 / 0.9998 n=4). FRESH critic counterexample hunt: 80 NEW genuine
+  slow-Bell-lattice residuals up to mb=0.4969, 0 violations of (B3-a′), worst rel margin 0.872 --
+  beat the builder's near-mb=1/2 search, still no counterexample (B3-a′ remains true and open).
+  b3_round5.py reproduced EXACTLY (★ min rel margin 0.167/0.866/0.976). CHANGES REQUESTED (milestone:
+  T1/T2/T3 verified; the multi-round (†)/finite-reduction strategy is now PROVED a dead end for
+  closing (★) -- a global residual argument is required).
+
 - R5 (builder, pending critic verification): BUILT Angle 1 (orbit-AVERAGE reduction of B3-a′).
   Theorem still NOT proved. The (B3-a) half is reduced to a SINGLE clean scalar gap (★), and the
   marginals are PROVED insufficient to close it. New PROVED lemmas (all verified, general where

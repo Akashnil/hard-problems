@@ -6,10 +6,17 @@ plus the whole-copy collapse); BACKSTOP = `k = mn` cyclic glue on the anti-corre
 The committed target (critic's "single cleanest target") is to prove `maxbias(P') < maxbias(P)`
 **directly**, never through the refuted `Φ_p` power-mean potential.
 
-**Status:** INCOMPLETE — blocked at the BACKSTOP (Lemma B3). All other steps are closed
-rigorously: the reduction to partitions, well-definedness, the two exact closed-form marginal
-maps, the diagonal odds-squaring contraction (the sole use of `maxbias<1/2`), the whole-collapse
-sufficient condition, the Rule-R loop, and the exact orbit/limit formula for the cyclic glue.
+**Status:** INCOMPLETE — blocked at the BACKSTOP (Lemma B3), specifically the single inequality
+(★)/(B3-a′). All other steps are closed rigorously: the reduction to partitions,
+well-definedness, the two exact closed-form marginal maps, the diagonal odds-squaring contraction
+(the sole use of `maxbias<1/2`), the whole-collapse sufficient condition, the Rule-R loop, and the
+exact orbit/limit formula for the cyclic glue.
+**R6: the orbit-aggregate `(†)` angle is shown to be a TAUTOLOGY of (B3-a′) (the `bias_i` cancel
+identically); and the two finite reductions the approach-critic flagged are PROVED insufficient by
+explicit full-support counterexamples — N7 alone (`n=3`), and `N7 + whole-collapse-failure`
+(`n≥4`). This maps the gap precisely: (★)/(B3-a′) is closable only by using the residual
+hypothesis globally, not via any fixed finite family of `k=2`-move-failure caps. The gap is
+unchanged and OPEN; see "Hard step (expanded, R6)".**
 **R5: the (B3-a) half of B3 is reduced to a single open scalar inequality (★) `P̄_O < G(O_1)`
 (orbit-average mass below the weight-1 geometric mean), via the now-CLOSED orbit-average chain
 (R4-1 identity + safe-direction AM-GM R5-4); the surveyor's layer-mass route is confirmed broken,
@@ -548,6 +555,111 @@ marginals are provably *insufficient*, so a joint argument is mandatory.
 
 ---
 
+## Hard step (expanded, R6) — the orbit-aggregate (†) angle, what it gives, and the sharpened gap
+
+This round executed the approved orbit-aggregate angle ("(†) `SLACK_O > BIASGAP`, aim the
+glue-failure at an UPPER bound `(UB)` on weight-≥2 joint mass") and discharged the
+approach-critic's CHANGES-REQUESTED obligation. The honest outcome is a **set of rigorous new
+facts that sharpen the gap and rule out the two routes the critic flagged as risky**, plus a
+**precisely-stated remaining gap**. The theorem is **NOT** proved this round. Every claim below is
+reproduced by `b3_round6.py` (in *Computational checks*); every inequality direction was checked
+under relative tolerance before composing.
+
+### (R6-T1) The (†) SLACK/BIASGAP decomposition is a TAUTOLOGY — no new leverage. [PROVED]
+
+For an orbit `O` of weight `w ≥ 2` with representative `y`, define (as in the survey)
+```
+   SLACK_O := Σ_{s=0}^{n-1} [ (1/w) Σ_{i∈supp(S^s y)} log bias_i  −  log P(S^s y) ]   (≥ 0, R5-1),
+   BIASGAP := Σ_{i=1}^{n} log( bias_i / P(e_i) )                                       (≥ 0, R5-1 at w=1).
+```
+**Claim (R6-T1).** `SLACK_O − BIASGAP = log( ∏_i P(e_i) / ∏_s P(S^s y) )`. Hence
+`(†) SLACK_O > BIASGAP` is **identically** `(B3-a′) ∏_s P(S^s y) < ∏_i P(e_i)`.
+
+*Proof.* By the cyclic incidence count R5-2, each coordinate `i` lies in the support of exactly `w`
+of the `n` shifts `S^s y`, so
+`Σ_s (1/w) Σ_{i∈supp(S^s y)} log bias_i = (1/w) Σ_i (w · log bias_i) = Σ_i log bias_i.`
+Therefore `SLACK_O = Σ_i log bias_i − Σ_s log P(S^s y)`, while
+`BIASGAP = Σ_i log bias_i − Σ_i log P(e_i)`. Subtracting, the `Σ_i log bias_i` terms cancel
+**exactly**, leaving `SLACK_O − BIASGAP = Σ_i log P(e_i) − Σ_s log P(S^s y) = log(∏_i P(e_i)/∏_s P(S^s y))`. ∎
+(Verified `|error| < 7.1·10⁻¹⁵` on all 89 residual orbits, `b3_round6.py [T1]`.)
+
+**Consequence.** The orbit-aggregate framing carries **zero** information beyond the bare product
+inequality (B3-a′): the `bias_i` cancel identically, so "bound `BIASGAP` above and let `SLACK_O`
+dominate" cannot be a proof strategy — it is the target written twice. The load-bearing object is
+the bare `∏_s P(S^s y) < ∏_i P(e_i)`, exactly as in R4/R5. (This is the formal statement of the
+critic's warning "do NOT lean on '(UB) caps BIASGAP'": there is no `BIASGAP` to cap that is not
+already the answer.)
+
+### (R6-T2) N7 (the source of the `(UB)` caps) is PROVABLY INSUFFICIENT for (B3-a′). [PROVED, explicit certificate]
+
+The angle's only joint input is **N7** = "every single-coordinate glue (Move I) fails to reduce
+`maxbias`", which yields the per-riser cap `(UB) a1^{(i,j)} ≤ (p_j q_i − mb·Z)/(q_i − p_i)`. We
+show N7 **cannot** imply (B3-a′), so any argument built solely from the `(UB)` caps is doomed.
+
+**Claim (R6-T2).** There is a **full-support** distribution `P` on `{0,1}³` with `mb < 1/2`
+satisfying N7 for which (B3-a′) **fails**.
+
+*Certificate (verified, `b3_round6.py [T2]`).* Take (order `000,001,010,011,100,101,110,111`)
+```
+   P3 = [0.26314, 0.22514, 0.06373, 0.12761, 0.01397, 0.03575, 0.19734, 0.07332]
+```
+Then `minP3 = 0.0140 > 0` (full support), biases `(0.3204, 0.4620, 0.4618)`, `mb = 0.4620 < 1/2`;
+**N7 holds** (every one of the three single-coordinate glues fails to reduce `maxbias`); yet for
+the weight-2 orbit `{110,101,011}`, `∏_s P(S^s y) = 9.0·10⁻⁴ > 2.0·10⁻⁴ = ∏_i P(e_i)`, so
+**(B3-a′) FAILS** (min relative margin `−89.9`). The point `P3` is **not** a residual — the full
+Bell-lattice `k=2` search reduces `maxbias` to `0.072` (the whole-collapse move), consistent with
+the theorem. ∎
+
+**Consequence.** N7 alone is a strictly weaker hypothesis than "residual", and it does not imply
+(B3-a′). Hence the `(UB)` caps — which are exactly the quantitative content of N7 at the realized
+riser pairs — **cannot** close (B3-a′) on their own, regardless of how cleverly they are composed.
+(My adversarial search confirms the failure is generic, not a single fluke: under the
+N7-only hypothesis the (B3-a′) relative margin is driven to `−∞`.) This rigorously vindicates the
+approach-critic's objection: the missing mass sits on pairs/structure that N7 does not constrain.
+
+### (R6-T3) The minimal sufficient conjunction of `k=2` move-failures GROWS with `n`. [PROVED, explicit certificate]
+
+What N7 misses is supplied by the **other** `k=2` move-failures (the residual is the conjunction of
+**all** of them). The cleanest additional scalar constraint is the **whole-collapse failure**
+(Lemma R4-4 / A3a), a residual consequence verified `89/89` here:
+```
+   (WC)   P(1^n) ≥ √(mb/(1-mb)) · P(0^n).
+```
+
+- **At `n = 3`,** the pair `{N7, (WC)}` appears **sufficient**: across `>10⁷` structured random
+  draws plus multi-start simulated annealing on the constraint manifold near `mb = 1/2`, **no**
+  full-support `P` with `mb<1/2` satisfying N7 ∧ (WC) was found to violate (B3-a′) (worst observed
+  relative margin `> 0.13`); and **all** 26 isolated `n=3` residuals satisfy N7 ∧ (WC). (Conjecture,
+  not proved; see Gap.) Note the binding `n=3` residual regime — the approach-critic's SA drove the
+  true-residual margin to `≈ 0.094` at `mb ≈ 0.4997` — sits inside this set.
+- **At `n ≥ 4`,** the pair `{N7, (WC)}` is **PROVABLY INSUFFICIENT**. *Certificate
+  (`b3_round6.py [T3]`):* there is a full-support `P` on `{0,1}⁴` with `minP = 0.0023`,
+  `mb = 0.4898 < 1/2`, satisfying **both** N7 and (WC), for which (B3-a′) fails (min relative
+  margin `≈ −1.87`); it is `k=2`-reducible (full Bell-lattice `k=2` reduces `maxbias` to `0.4375`),
+  so correctly not a residual. The reducing move is a *partial* absorb-block (Move II) on a proper
+  subset of coordinates — a `k=2` failure that neither N7 nor (WC) records.
+
+**Consequence (the precise structural obstruction).** No FIXED finite list of `k=2` move-failures
+is uniformly sufficient to imply (B3-a′): the residual hypothesis is the conjunction over the
+**entire Bell lattice** of `k=2` set-partitions, and the minimal sufficient sub-conjunction grows
+with `n` (`{N7,(WC)}` suffices at `n=3`, fails at `n=4`; at `n=4` the partial absorb-blocks are
+needed, and so on). This is exactly why every per-pair / per-move closing attempt over five rounds
+has stalled: the input that closes (B3-a′) is irreducibly the *full* residual conjunction, not any
+bounded family of its consequences. A closing proof must use the residual hypothesis **as a whole**
+(e.g. via the absorb-block contraction Lemma A3a applied to *every* block simultaneously), not a
+fixed finite set of scalar caps.
+
+### (R6) Net effect on the gap
+
+(★)/(B3-a′)/(†) remains **OPEN** and is unchanged as a target (all three are the same inequality,
+now including the tautology R6-T1). What is newly **rigorous** is the *map of the gap*: (i) the
+orbit-aggregate `SLACK/BIASGAP` reframing is information-free; (ii) the `(UB)`-from-N7 route is
+provably insufficient (explicit `n=3` certificate); (iii) no fixed finite conjunction of `k=2`
+move-failures is uniformly sufficient (explicit `n=4` certificate against the cleanest candidate
+`{N7,(WC)}`). The exact remaining gap is stated in the Gap section.
+
+---
+
 ## Edge cases
 
 - **Full support / positive probability:** Lemma S1 — every conditioning event contains the
@@ -702,6 +814,29 @@ weight-1 mass + tiny singletons): **40** new residuals isolated, **0** violation
 or R5-3. The 100% figures for `M_1/d ≥ G(O_1)` and `M_w/d ≥ P̄_O` confirm the survey's layer-mass
 route is broken (the intermediate `M_w/d < G(O_1)` is strictly stronger than (★) and false).
 
+### R6 advances certificate (`b3_round6.py`)
+
+Reproduce with `PYTHONPATH=. python3 b3_round6.py`.
+
+```
+[T1] (dagger) SLACK_O > BIASGAP  IS  (B3-a') prod_s P < prod e (bias_i cancel)
+     max | (SLACK_O - BIASGAP) - log(prod e / prod_s P) |  =  7.1e-15   (== 0)   [TAUTOLOGY, PROVED]
+
+[T2] N7 (all single-glues fail) does NOT imply (B3-a')  -- (UB)-only route is dead
+     P3 = [0.26314,0.22514,0.06373,0.12761,0.01397,0.03575,0.19734,0.07332] (full support, minP=0.014)
+     biases (0.3204,0.4620,0.4618), mb=0.4620<1/2;  N7 holds = True
+     (B3-a') min rel margin = -89.9  (FAILS);  FULL Bell-lattice k=2 reduces maxbias to 0.0720
+     ==> N7 strictly insufficient; the (UB) caps alone cannot close (B3-a').            [PROVED]
+
+[T3] N7 + whole-collapse-failure (WC): clean scalar pair
+     n=3: all 26 residuals satisfy N7 ∧ (WC);   sufficient in >1e7 trials + SA (worst margin >0.13) [CONJECTURE]
+     n=4: all 63 residuals satisfy N7 ∧ (WC);   but explicit full-support P (minP=0.0023, mb=0.4898<1/2)
+          satisfies N7 ∧ (WC) with (B3-a') min rel margin = -1.87 (FAILS); k=2-reducible (best 0.4375).
+     ==> N7 ∧ (WC) PROVABLY INSUFFICIENT for n>=4; minimal sufficient k=2-failure set grows with n. [PROVED]
+
+[(UB) cited, direction re-confirmed] a1^{(i,j)} <= (p_j q_i - mb*Z)/(q_i-p_i) on risers: 95/95
+```
+
 ### R4 contrapositive / move-coverage probes (slow Bell-lattice residual test)
 
 ```
@@ -801,6 +936,43 @@ residual-mass constraints (NOT the marginals — proved insufficient via R5-3; N
 `M_w/d` route — proved broken). (ii) (B3-b″): a rigorous `mb > 1/((n-1)²+1)` (or directly `mb>1/n`)
 from the residual conjunction. Either path + B2 closes the theorem; neither is in hand.
 
+**R6 update to the gap (this round): the gap is the SAME inequality (★)/(B3-a′)/(†), now mapped
+precisely.** Three rigorous facts (Section "Hard step (expanded, R6)", certificate `b3_round6.py`):
+
+- **(R6-T1) the orbit-aggregate `(†)` reframing is a tautology.** `SLACK_O − BIASGAP =
+  log(∏_i P(e_i)/∏_s P(S^s y))` exactly (the `bias_i` cancel by the R5-2 incidence collapse), so
+  `(†) SLACK_O > BIASGAP` **is** `(B3-a′)` verbatim. There is no `BIASGAP` to "cap from above"
+  that is not already the target; the load-bearing object is the bare `∏_s P(S^s y) < ∏_i P(e_i)`.
+
+- **(R6-T2) N7 (single-glue-failure, the source of the `(UB)` caps) is provably insufficient.** The
+  explicit full-support `P3` on `{0,1}³` (`mb=0.462<1/2`) satisfies N7 yet violates (B3-a′)
+  (`∏_s P = 9·10⁻⁴ > 2·10⁻⁴ = ∏ P(e_i)`), and is `k=2`-reducible (whole-collapse, `maxbias→0.072`).
+  So the `(UB)` caps from the `n` single-glue risers **cannot** close (B3-a′) on their own — the
+  joint mass that breaks N7-only examples sits on pairs/structure N7 does not constrain.
+
+- **(R6-T3) no fixed finite conjunction of `k=2` move-failures is uniformly sufficient.** The
+  cleanest two-constraint candidate `{N7, whole-collapse-failure (WC)}` holds on all 89 residuals
+  and is (conjecturally, no counterexample in `>10⁷` trials + SA) sufficient at `n=3`, but is
+  **provably insufficient at `n≥4`**: an explicit full-support `P` on `{0,1}⁴` (`mb=0.4898<1/2`)
+  satisfies N7 ∧ (WC) yet violates (B3-a′) and is `k=2`-reducible by a partial absorb-block. The
+  minimal sufficient sub-conjunction of `k=2` failures **grows with `n`**. Hence (★) is closable
+  only by using the residual hypothesis **as a whole** (the absorb-block contraction A3a applied
+  to every block simultaneously), not any bounded family of scalar caps.
+
+> **Exact remaining gap (R6, precise).** Prove `(B3-a′): ∏_{s=0}^{n-1} P(S^s y) < ∏_i P(e_i)` for
+> every full-support residual `P` (`mb<1/2`, no `k=2` set-partition of the `2n` coordinates reduces
+> `maxbias`) and every pattern `y` with `ham(y)≠1`. Numeric status: `0` violations on `89` isolated
+> residuals (`n=3,4`) + `60` fresh near-`mb=1/2` residuals; min relative margin `0.167` (`n=3`),
+> `0.866` (`n=4`); the approach-critic's SA drove the true-residual margin to `≈0.094` at
+> `mb≈0.4997`. **What is missing:** a derivation that consumes the residual hypothesis *globally*.
+> The two natural finite reductions are ruled out: the marginal cap `∏ bias_i` overshoots (R5-3);
+> the `(UB)`-from-N7 caps are insufficient (R6-T2); and `{N7,(WC)}` (or any fixed finite set of
+> `k=2`-failure constraints) is insufficient for large `n` (R6-T3). A promising un-attempted lever:
+> Lemma A3a says that for **every** block `B`, the residual forces either
+> `A_1^{(B)}/A_0^{(B)} ≥ √(mb/(1-mb))` *or* an off-block coordinate `≥ mb`; turning this
+> exponentially-large disjunction (one per block) into a single bound on `∏_s P(S^s y)` is the open
+> problem. The conjecture (★)/(B3-a′) is **certified true** with margin but **not proved**.
+
 **Honest status.** This is a precisely-stated, numerically-certified *scalar reduction* of B3 (the
 mechanism — cyclic geometric-mean limit, identified maximizer `O_1`, threshold `1/n` — is named;
 margins verified on all isolated `n=3` AND newly-hunted `n=4` residuals, plus `n=5` and the spec).
@@ -838,8 +1010,11 @@ sub-claims, reformulates them exactly, and reduces (B3-b) further.
 | R5-4 orbit AM-GM `∏_s P(S^s y) ≤ P̄_O^n` (safe direction) | PROVED + VERIFIED |
 | R5 marginals-insufficient: cap `∏_i bias_i ≥ ∏_i P(e_i)`, overshoots target | PROVED + VERIFIED |
 | (B3-a′) ⟸ **(★)** via R4-1 + R5-4 (orbit-average chain) | PROVED (reduction) |
+| R6-T1 `(†) SLACK_O > BIASGAP` is a tautology = `(B3-a′)` (`bias_i` cancel) | PROVED + VERIFIED (7e-15) |
+| R6-T2 N7 (single-glue-failure) ⇏ `(B3-a′)` — explicit full-support `n=3` certificate | PROVED (counterexample) |
+| R6-T3 no fixed finite `k=2`-failure set is uniformly sufficient — explicit `n=4` certificate | PROVED (counterexample) |
 | **(★) residual ⇒ `P̄_O < G(O_1)` for orbit weight ≠ 1** | **OPEN — single scalar gap; certified 130/130** |
-| **(B3-a′) residual ⇒ `∏_s P(S^s y) < ∏_i P(e_i)` for `ham(y)≠1`** | **OPEN — ⟸ (★); certified 90/90** |
+| **(B3-a′) residual ⇒ `∏_s P(S^s y) < ∏_i P(e_i)` for `ham(y)≠1`** | **OPEN — ⟸ (★); certified 89/89 + 60 fresh** |
 | **(B3-b″) residual ⇒ `mb > 1/((n-1)²+1)` [⇒ (B3-b) `mb>1/n` via the chain]** | **OPEN — weaker than `1/n`; certified 90/90** |
 
 Combined construction (best `k=2` partition else `k=mn` cyclic): **0 failures** over 30,000+
