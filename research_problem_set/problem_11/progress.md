@@ -1,5 +1,27 @@
 # Progress — problem_11
 
+- R5 (builder, pending critic verification): BUILT Angle 1 (orbit-AVERAGE reduction of B3-a′).
+  Theorem still NOT proved. The (B3-a) half is reduced to a SINGLE clean scalar gap (★), and the
+  marginals are PROVED insufficient to close it. New PROVED lemmas (all verified, general where
+  stated): (R5-1) monotone-support bound P(z)≤min_{i∈supp}bias_i≤GM_supp(bias_i), and P(z)≤q_i for
+  i∉supp (general, 0/159000); (R5-2) cyclic incidence — each coord is 1 in exactly w of the n shifts
+  of a weight-w pattern (combinatorial, n=3..6); (R5-3, NEW) shift-product cap ∏_s P(S^s y) ≤
+  ∏_i bias_i (and sharper ∏_i bias_i^{w/n} q_i^{(n-w)/n}) — PROVED from R5-1+R5-2+AM-GM, GENERAL
+  (0/159000); (R5-4) orbit AM-GM ∏_s P(S^s y) ≤ P̄_O^n, SAFE direction (78/78,315/315,7/7). Top-level
+  chain CLOSED to one gap: ∏_s P(S^s y) =[R4-1] (∏_O P)^{n/d} ≤[R5-4] P̄_O^n <[★, OPEN] G(O_1)^n =
+  ∏_i P(e_i) = (B3-a′). The OPEN gap is now the SINGLE inequality (★) P̄_O < G(O_1) for orbit weight
+  ≠1 (P̄_O = orbit-average mass, G(O_1)=(∏_i P(e_i))^{1/n}); certified 0 viol on 90 isolated + 40
+  fresh n=3 residuals, min rel margin 0.167 (n=3), 0.866 (n=4), 0.976 (n=5). CONFIRMED the surveyor's
+  M_w/d route is BROKEN (M_1/d≥G(O_1) 100%, M_w/d≥P̄_O 100% — intermediate strictly stronger than ★,
+  false). KEY NEW RIGOROUS NEGATIVE RESULT: R5-3 proves the MARGINALS bias_i CANNOT close (★)/(B3-a′)
+  — any per-element bound aggregates (via cyclic incidence) to a product of per-coord factors, capped
+  at ∏bias_i ≥ ∏P(e_i)=G(O_1)^n (overshoots by ∏bias_i/P(e_i), up to 25:1/coord); and (★) fails ~55%
+  on GENERAL mb<1/2 P, so the JOINT residual hypothesis is load-bearing and not expressible via
+  marginals. This pins what a closing argument must use (joint k=2-failure mass constraints, not
+  marginals, not layer mass M_w). Also verified bracketing facts: P̄_O<AM_i(e_i) (stronger than ★ via
+  AM≥GM, but only equals ★ when d=n; 0 viol), P̄_O<max_i(e_i) (0 viol), singletons P(0^n),P(1^n)<G(O1)
+  (0 viol). Files: proof.md (§"Hard step (expanded, R5)"), b3_round5.py (new certificate). NOT a proof.
+
 - R4 (builder, pending critic verification): BUILT Angle 1. Theorem still NOT proved; two EXACT
   reformulations + one strict reduction added, all numerically certified 0 violations on the 90
   SLOW-verified residuals (b3_round4.py). (1) (B3-a) rewritten EXACTLY as the shift-product
@@ -69,3 +91,5 @@
   (B3-a),(B3-b) GENUINELY OPEN (no hidden proof, no overclaim); theorem NOT proved.
 
 - R4 (critic-verified): CONFIRMED the round-4 advances; theorem still NOT proved, no overclaim. Independently RE-DERIVED all four new claims from scratch: R4-1 orbit-geomean=shift-product G(O)=(∏_s P(S^s y))^{1/n} [PROVED: n shifts hit each of d orbit elts n/d times, exact ✓]; R4-2 riser bound bias_j'≤p_j q_i/Z [PROVED via a_1 p+a_0 q=p_j q+a_1(p_i-q_i), p_i<q_i ⇒ direction is an UPPER bound, 0 viol]; R4-3 decomposition E[ham]-1=Σ_{ham≥2}P(ham-1)-P(0^n) [PROVED exact ✓]; R4-4 A3a whole-collapse-fail P(1^n)≥√(mb/(1-mb))P(0^n) [direction re-derived: residual ⇒ NOT reduced ⇒ A1/A0≥√, 90/90 ✓]. Conditional chain n·mb≥E[ham]≥1+[(n-1)√(mb/(1-mb))-1]P(0^n) verified PROVED algebra; the implication mb>1/((n-1)²+1)⇒mb>1/n is sound & NON-circular (1/((n-1)²+1)<1/n strictly for n≥3, so B3-b'' is genuinely WEAKER yet implies B3-b — the residual A3a bound supplies the gap; bracket>0⇔mb>1/((n-1)²+1) verified symbolically). b3_round4.py reproduced EXACTLY (n=3 26/26 all 7 lines, n=4 63/63, n=5 1/1). .pkl residuals re-confirmed GENUINE via slow Bell-lattice (sampled 11/90). FRESH critic hunt (slow test, prescreened): 289 NEW n=3 residuals, 0 violations of B3-a'/B3-b''/B3-b, min mb=0.3714. No "1.0000001" fast-test figure cited. STILL OPEN: B3-a' (∏_s P(S^s y)<∏_i P(e_i) for ham(y)≠1) and B3-b'' (mb>1/((n-1)²+1)) — both genuine aggregate residual-conjunction facts, no elementary proof. Verdict CHANGES REQUESTED (milestone).
+
+- R5 (critic-verified): CONFIRMED the round-5 advances; theorem still NOT proved, no overclaim. INDEPENDENTLY re-derived every new R5 claim with my OWN code (rebuilt patterns/biases/shifts/orbits, not b3lib): R5-1 monotone-support P(z)<=min_supp bias_i<=GM_supp (0/159000, +min<=GM step 0/159000); R5-2 cyclic incidence (n=3..7); R5-3 shift-product cap prod_s P<=prod bias_i [direction CORRECT] (0/159000, per-shift log bound P(y)<=GM_supp 0/44000); R5-4 orbit AM-GM prod_s P<=Pbar^n [SAFE direction product<=mean^d, NOT the reversed log-supermodular] verified on GENERAL P 0/36000 + rel-tol 0/160000; R4-1 identity re-confirmed exact (1e-19). REDUCTION (B3-a')<==(star) is SUFFICIENT and NON-CIRCULAR: 0/160000 genuine sufficiency counterexamples (Pbar<G but prod_s P>=prod P(e_i)) under relative tolerance; (star) is sufficient but not necessary (5065 cases B3-a' holds while star fails) -- a legitimate strict strengthening, not a backwards/weaker variant. (star) is DISTINCT from the dead per-pattern bound (per-pattern P(z)<G fails 3 orbits at n=3, star holds 0 -- averaging repairs the failures). NEGATIVE result VERIFIED: prod bias_i>=prod P(e_i) always (0/6000; bias_i>=P(e_i) 0/24000) so marginal cap overshoots, and (star) fails on majority of general mb<1/2 P (I measured 85% vs builder's ~55% -- regime-dependent, strengthens the claim); does NOT undermine the reduction. b3_round5.py reproduced EXACTLY (min rel margin star 0.167/0.866/0.976 n=3/4/5). FRESH slow Bell-lattice hunt: 50 NEW n=3 residuals (disjoint from .pkl), 0 violations of star/B3-a'/R5-3/R5-4, min mb=0.360. Sampled .pkl residuals re-confirmed GENUINE via my own slow search (5/5 n=3, 5/5 n=4). NOTE: a first abs-tol sufficiency test showed 123 false positives on ~1e-22 degenerate masses -- artifacts, 0 under rel-tol. STILL OPEN: (star) [joint residual fact, marginals proved insufficient] and (B3-b'') [deprioritized, natural chains circular]. Either + B2 closes the theorem. CHANGES REQUESTED (milestone).

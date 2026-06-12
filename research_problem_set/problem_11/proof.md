@@ -10,6 +10,11 @@ The committed target (critic's "single cleanest target") is to prove `maxbias(P'
 rigorously: the reduction to partitions, well-definedness, the two exact closed-form marginal
 maps, the diagonal odds-squaring contraction (the sole use of `maxbias<1/2`), the whole-collapse
 sufficient condition, the Rule-R loop, and the exact orbit/limit formula for the cyclic glue.
+**R5: the (B3-a) half of B3 is reduced to a single open scalar inequality (★) `P̄_O < G(O_1)`
+(orbit-average mass below the weight-1 geometric mean), via the now-CLOSED orbit-average chain
+(R4-1 identity + safe-direction AM-GM R5-4); the surveyor's layer-mass route is confirmed broken,
+and the marginals are PROVED insufficient (R5-3). The remaining open gaps are (★) [for (B3-a)] and
+(B3-b″) [for (B3-b)]; either + B2 closes the theorem.**
 **R3 progress:** Lemma B3 is now *reduced* to two concrete scalar sub-claims — **(B3-a)** the
 geometric-mean-maximizing cyclic orbit is the weight-1 orbit `O_1` (so `ham(O*)/n = 1/n`), and
 **(B3-b)** `mb > 1/n` — which trivially give `ham(O*)/n = 1/n < mb`. Both are certified with zero
@@ -36,6 +41,18 @@ contrapositive evidence: across 917 full-support `P` with `E[ham]≤1`, **zero**
 **Still OPEN:** the shift-product inequality (B3-a) and the weaker scalar bound `mb>1/((n-1)²+1)`
 (or directly `mb>1/n`) both remain aggregate consequences of the full residual conjunction without
 an elementary proof. Details in **Section "Hard step (expanded, R4)"** and the updated Gap.
+
+**R5 progress (this round): the (B3-a) half is reduced to a SINGLE clean scalar gap (★), and the
+marginals are proved insufficient.** Following the approved orbit-AVERAGE chain, (B3-a′) now follows
+from the one inequality **(★) `P̄_O < G(O_1)`** (orbit-average mass `<` weight-1 geometric mean) via
+two CLOSED steps: the R4-1 identity and the SAFE-direction AM-GM **R5-4** (`∏_s P(S^s y) ≤ P̄_O^n`).
+The survey's `M_w/d` route is CONFIRMED broken (`M_1/d ≥ G(O_1)` and `M_w/d ≥ P̄_O` in 100% of
+cases). A NEW general lemma **R5-3** (`∏_s P(S^s y) ≤ ∏_i bias_i`, proved from a monotone-support
+bound R5-1 + a cyclic incidence count R5-2) is the best bound the *marginals* yield — and it
+provably overshoots `∏_i P(e_i)` (by `∏_i bias_i/P(e_i)`), so **(★) cannot be closed from the
+marginals alone; it genuinely requires the joint residual-mass constraints.** (★) is verified with
+`0` violations on 90 slow-isolated + 40 fresh n=3 residuals, min relative margin `0.167` (n=3).
+Details in **Section "Hard step (expanded, R5)"**. The theorem is **NOT** claimed proved.
 
 ---
 
@@ -424,6 +441,113 @@ I tested, with the slow Bell-lattice residual test, exactly which moves are need
 
 ---
 
+## Hard step (expanded, R5) — orbit-average reduction of (B3-a′), and the exact gap
+
+This round targets **(B3-a′)** via the orbit-AVERAGE chain (approach-critic APPROVED the
+top-level reduction as direction-sound and non-circular). The chain is:
+
+> For an orbit `O` of length `d` and representative `y` (`ham(y)=w≠1`), with
+> `P̄_O := (1/d)·Σ_{z∈O} P(z)` the orbit-average mass and `G(O_1) := (∏_i P(e_i))^{1/n}`:
+>
+> `∏_{s=0}^{n-1} P(S^s y)  =  (∏_{z∈O}P(z))^{n/d}`  [R4-1, PROVED]
+> `                        ≤  P̄_O^{\,n}`              [AM-GM, **R5-4**, SAFE direction]
+> `                        <  G(O_1)^n = ∏_i P(e_i)`  [**(★)**, OPEN — the one remaining gap].
+
+The first two steps are now closed; only **(★) `P̄_O < G(O_1)`** is open. Every claim below is
+verified with **zero violations** on all 90 slow-isolated residuals plus 40 fresh n=3 residuals
+(`b3_round5.py`, reproduced in *Computational checks*).
+
+### (R5-4) The AM-GM step is the SAFE direction — PROVED
+
+**Lemma R5-4 (orbit AM-GM).** For any orbit `O` of length `d` with representative `y`,
+`∏_{s=0}^{n-1} P(S^s y) ≤ P̄_O^{\,n}`, where `P̄_O = (1/d)Σ_{z∈O}P(z)`.
+*Proof.* By the AM-GM inequality on the `d` positive numbers `{P(z) : z∈O}`,
+`∏_{z∈O}P(z) ≤ ((1/d)Σ_{z∈O}P(z))^d = P̄_O^{\,d}`. Raising both sides to the positive power `n/d`
+(monotone, both sides `>0`) and using `∏_s P(S^s y) = (∏_{z∈O}P(z))^{n/d}` (R4-1) gives
+`∏_s P(S^s y) ≤ P̄_O^{\,n}`. ∎ (Verified `78/78, 315/315, 7/7` orbits, n=3,4,5; the survey's
+direction concern is resolved — this is `product ≤ mean^d`, not the reversed log-supermodular bound.)
+
+Note `P̄_O = (1/n)Σ_{s=0}^{n-1} P(S^s y)` as well, since the `n` shifts hit each of the `d` distinct
+orbit elements `n/d` times. So (★) is exactly: the orbit-average of `P` over the cyclic shifts of `y`
+is strictly below the geometric mean of `P` over the weight-1 patterns.
+
+### (R5-broken) The survey's layer-mass route is dead — CONFIRMED
+
+The surveyor proposed `P̄_O ≤ M_w/d`, then `M_w/d < G(O_1)` from `M_w<M_1`. This is **broken** (the
+approach-critic flagged it; I re-verified numerically, `b3_round5.py`):
+`M_1/d ≥ G(O_1)` in **100%** of cases (because `M_1 = n·AM(P(e_i)) ≥ n·GM = n·G(O_1) ≥ d·G(O_1)`),
+and `M_w/d ≥ P̄_O` in **100%** of cases — so `M_w/d < G(O_1)` is *strictly stronger* than (★) and
+routes the wrong way. We DO NOT coarsen to layer mass; the margin lives at the orbit-average level.
+
+### (R5-1,2,3) A new PROVED general cap — and why marginals alone cannot close (★)
+
+We isolate exactly how far elementary, residual-free bounds can go, and where the genuine
+joint-mass content begins.
+
+**Lemma R5-1 (monotone-support bound — PROVED, general).** For every full-support `P` and every
+pattern `z` of weight `w≥1`, `P(z) ≤ min_{i∈supp(z)} bias_i`. Moreover, for every `i∉supp(z)`,
+`P(z) ≤ 1-bias_i = q_i`. Hence `P(z) ≤ GM_{i∈supp(z)}(bias_i)` and
+`P(z) ≤ ∏_{i=1}^n (bias_i^{z_i} q_i^{1-z_i})^{1/n}`.
+*Proof.* `{X=z} ⊆ {X_i=1}` for `i∈supp(z)` gives `P(z)≤Pr(X_i=1)=bias_i`; likewise `{X=z}⊆{X_i=0}`
+for `i∉supp(z)` gives `P(z)≤q_i`. The minimum of a set of upper bounds is an upper bound, and the
+minimum is `≤` any geometric mean of the same numbers. ∎ (Verified `0/159000` random full-support
+instances, all `n=3,4,5`.)
+
+**Lemma R5-2 (cyclic incidence — PROVED, combinatorial).** For a weight-`w` pattern `y`, across the
+`n` cyclic shifts `S^0 y,…,S^{n-1} y` each coordinate `i` is set to `1` in exactly `w` of them.
+*Proof.* `(S^s y)_i = y_{(i-s) mod n}`; as `s` ranges over `0,…,n-1`, `(i-s) mod n` ranges over all
+of `{0,…,n-1}` once, hitting the `w` positions of `supp(y)` exactly `w` times. ∎ (Verified n=3,4,5,6.)
+
+**Lemma R5-3 (shift-product cap — PROVED, general, NEW this round).** For every full-support `P` and
+every pattern `y` of weight `w≥1`,
+```
+   ∏_{s=0}^{n-1} P(S^s y)  ≤  ∏_{i=1}^{n} bias_i,
+```
+and the sharper `∏_s P(S^s y) ≤ ∏_i bias_i^{\,w/n}·q_i^{\,(n-w)/n}`.
+*Proof.* Take logs and apply R5-1 in the form `log P(S^s y) ≤ (1/w)Σ_{i∈supp(S^s y)} log bias_i`
+(GM over support). Summing over `s` and using R5-2 (each `i` is in the support of exactly `w` shifts):
+`Σ_s log P(S^s y) ≤ (1/w)Σ_s Σ_{i∈supp(S^s y)} log bias_i = (1/w)·Σ_i (w·log bias_i) = Σ_i log bias_i`.
+The sharper form uses the full R5-1 bound `log P(S^s y) ≤ (1/n)Σ_i (z_i log bias_i + (1-z_i)log q_i)`
+for `z=S^s y`, summed with R5-2 (`Σ_s z_i = w`, `Σ_s(1-z_i)=n-w`). ∎ (Verified `0/159000` general
+instances; `78/78, 315/315, 7/7` on residuals — it holds for ALL `P`, residual or not.)
+
+**Why this caps out — the precise location of the gap.** R5-3 is the *best* bound obtainable from
+the single-coordinate marginals `bias_i`: any per-element bound `P(z) ≤ f(bias_{·})` aggregates, via
+the cyclic incidence R5-2, to a product of per-coordinate factors. But
+`∏_i bias_i ≥ ∏_i P(e_i) = G(O_1)^n` (since `bias_i = Σ_{x_i=1}P(x) ≥ P(e_i)`), so the cap lands
+**above** the target, by the factor `∏_i (bias_i/P(e_i))`. Numerically this factor is large (the
+sharper `q`-weighted cap is even worse, `77×–320× · G(O_1)^n`), because `bias_i/P(e_i)` can reach
+`25:1` on residuals (`min P(e_i)/bias_i = 0.039` at n=3). **Conclusion (rigorous):** no bound that
+depends only on the marginals `bias_i` can prove (B3-a′): the marginals are consistent with mass
+concentrated on high-weight patterns (where (★) fails — and indeed (★) fails on ~55% of *general*
+`mb<1/2` `P`), and what forbids that concentration is the **joint** residual hypothesis, not the
+marginals. This pins down exactly what a closing argument must use: the joint-mass constraints from
+the `k=2`-move failures, not any per-coordinate quantity.
+
+### (R5-5) Verified orbit-average facts that bracket (★)
+
+On every residual (`b3_round5.py`, `0` violations; min relative margins below):
+- `P̄_O < AM_i(P(e_i)) = M_1/n` for every weight-`≠1` orbit (the *arithmetic*-mean version; this is
+  **stronger** than (★) when `d=n` because `P̄_O = orbit-mass/n` and the linear orbit-mass bound
+  `orbit-mass < M_1` holds with `≥46%` margin — but it is **not by itself** (★), since `AM ≥ GM`).
+- `P̄_O < max_i P(e_i)` (0 viol; again `max ≥ GM`, so weaker than (★)).
+- `P(0^n) < G(O_1)` and `P(1^n) < G(O_1)` (the singleton orbits, `d=1`, are handled — they are not
+  the maximizer).
+
+So (★) is bracketed: `P̄_O < AM_i(P(e_i))` is verified but too weak (uses AM not GM), and the
+per-pattern `P(z)<G(O_1)` is too strong (fails `3/26` at n=3). (★) lives strictly between — the
+orbit *averaging* is exactly what repairs the per-pattern failures, and the `AM→GM` spread of the
+weight-1 masses is exactly the residual content still to be quantified.
+
+**Status of (★):** OPEN. It is now the **single** remaining gap (closing it gives (B3-a′) via R4-1
++ R5-4, hence (B3-a), hence — with the verified Lemma B2 and the (B3-b) half — the theorem). It is a
+clean, fully-numeric, large-margin scalar inequality (min relative margin `(G(O_1)-P̄_O)/G(O_1) =
+0.167` at n=3, `0.866` at n=4, `0.976` at n=5; `0` violations on 90+40 residuals). What is **not**
+yet in hand is a signed derivation of (★) from the residual joint-mass constraints; R5-3 proves the
+marginals are provably *insufficient*, so a joint argument is mandatory.
+
+---
+
 ## Edge cases
 
 - **Full support / positive probability:** Lemma S1 — every conditioning event contains the
@@ -550,6 +674,34 @@ n=4 (63 residuals): all 7 lines pass (756/756 for B3-a').
 n=5 (1 residual):   all 7 lines pass (27/27 for B3-a').
 ```
 
+### R5 advances certificate (`b3_round5.py`)
+
+Reproduce with `PYTHONPATH=. python3 b3_round5.py`. General lemmas (R5-1, R5-3) checked on 159000
+random full-support instances; orbit facts on the SLOW-verified residual datasets.
+
+```
+[R5-1] P(z) <= GM_supp(bias_i)  (general)            : violations = 0/159000
+[R5-2] cyclic incidence (each coord in w of n shifts): True  (n=3,4,5,6)
+[R5-3] prod_s P(S^s y) <= prod_i bias_i  (general)   : violations = 0/159000
+n=3 (26 residuals, 78 weight-!=1 orbits):
+  [R5-4] prod_s P <= Pbar^n (safe AM-GM)         : 78/78
+  [R5-3 on residuals] prod_s P <= prod bias_i    : 78/78
+  (star)  Pbar_O < G(O1)   [OPEN]                : 78/78   min rel margin = 0.1672
+  (B3-a') prod_s P < prod e_i [OPEN, via R5-4]   : 78/78
+  Pbar_O < AM_i(e_i)  [VERIFIED]                 : 78/78
+  Pbar_O < max_i(e_i) [VERIFIED]                 : 78/78
+  P(0^n),P(1^n) < G(O1) [VERIFIED]               : 52/52
+  BROKEN survey route M_1/d >= G(O1) (=100%)     : 78/78
+  BROKEN survey route M_w/d >= Pbar  (=100%)     : 78/78
+n=4 (63 residuals): all pass; (star) 315/315, min rel margin 0.866; broken routes 100%.
+n=5 (1 residual):   all pass; (star) 7/7,   min rel margin 0.976; broken routes 100%.
+```
+
+Fresh adversarial n=3 residual hunt (slow Bell-lattice `is_residual`, structured sampling toward
+weight-1 mass + tiny singletons): **40** new residuals isolated, **0** violations of (★), (B3-a′),
+or R5-3. The 100% figures for `M_1/d ≥ G(O_1)` and `M_w/d ≥ P̄_O` confirm the survey's layer-mass
+route is broken (the intermediate `M_w/d < G(O_1)` is strictly stronger than (★) and false).
+
 ### R4 contrapositive / move-coverage probes (slow Bell-lattice residual test)
 
 ```
@@ -628,11 +780,26 @@ exact, cleaner forms but does NOT close them:
   contrapositive (917 instances, 0 residuals with `E[ham]≤1`, worst `0.44·mb`) shows the bound is
   TRUE with large margin, but the multi-move conjunction has not been turned into a closed chain.
 
-**What would close it.** (i) (B3-a′): a joint/geomean-level inequality `∏_s P(S^s y) < ∏_i P(e_i)`
-for `ham(y)≠1`, using residual-derived mass bounds that are not per-pattern. (ii) (B3-b″): a
-rigorous `mb > 1/((n-1)²+1)` (or directly `mb>1/n`) from the residual conjunction — e.g. a closed
-combination of the single-glue, whole-collapse, and permutation-glue failures. Either path + B2
-closes the theorem; neither is in hand.
+**R5 update to the gap (this round): the (B3-a) half is now ONE inequality (★).** Via the approved
+orbit-average chain (R4-1 identity + safe-direction AM-GM R5-4), (B3-a′) — hence (B3-a) — follows
+from the single scalar inequality
+
+> **(★) [orbit-average form].** For every full-support residual `P` and every cyclic orbit `O` of
+> weight `≠1`, `P̄_O := (1/|O|)Σ_{z∈O}P(z) < G(O_1) = (∏_i P(e_i))^{1/n}`.
+
+This is the cleanest, least-boundary-tight target produced so far (min relative margin
+`(G(O_1)-P̄_O)/G(O_1) = 0.167` at n=3, `0.866` at n=4, `0.976` at n=5; `0` violations on 90 isolated
++ 40 fresh n=3 residuals). **What resists:** R5-3 proves the *marginals* `bias_i` cannot close it —
+the best marginal cap `∏_s P(S^s y) ≤ ∏_i bias_i` overshoots `∏_i P(e_i)` by the factor
+`∏_i bias_i/P(e_i)` (up to `25:1` per coordinate), and (★) fails on ~55% of *general* `mb<1/2` `P`,
+so the **joint** residual hypothesis (no `k=2` move reduces `maxbias`) is load-bearing and not
+expressible through any per-coordinate quantity. A closing argument must therefore bound the
+orbit-average `P̄_O` using the joint-mass constraints from the `k=2`-move failures directly.
+
+**What would close it.** (i) (B3-a′): the single inequality **(★) `P̄_O < G(O_1)`**, from the joint
+residual-mass constraints (NOT the marginals — proved insufficient via R5-3; NOT the layer-mass
+`M_w/d` route — proved broken). (ii) (B3-b″): a rigorous `mb > 1/((n-1)²+1)` (or directly `mb>1/n`)
+from the residual conjunction. Either path + B2 closes the theorem; neither is in hand.
 
 **Honest status.** This is a precisely-stated, numerically-certified *scalar reduction* of B3 (the
 mechanism — cyclic geometric-mean limit, identified maximizer `O_1`, threshold `1/n` — is named;
@@ -665,7 +832,14 @@ sub-claims, reformulates them exactly, and reduces (B3-b) further.
 | R4-3 `E[ham]` decomposition `E[ham]-1 = Σ_{w≥2}P(x)(ham-1) - P(0^n)` | PROVED + VERIFIED |
 | R4-4 whole-collapse failure `P(1^n) ≥ √(mb/(1-mb))P(0^n)` on residuals | PROVED (A3a) + VERIFIED 90/90 |
 | R4 conditional chain `mb>1/((n-1)²+1) ⇒ E[ham]>1 ⇒ mb>1/n` | PROVED (algebra) + VERIFIED |
-| **(B3-a′) residual ⇒ `∏_s P(S^s y) < ∏_i P(e_i)` for `ham(y)≠1`** | **OPEN — exact reform.; certified 90/90** |
+| R5-1 monotone-support `P(z) ≤ min_supp bias_i ≤ GM_supp bias_i` (general) | PROVED + VERIFIED |
+| R5-2 cyclic incidence (each coord in exactly `w` of `n` shifts) | PROVED (combinatorial) + VERIFIED |
+| R5-3 shift-product cap `∏_s P(S^s y) ≤ ∏_i bias_i` (general) | PROVED + VERIFIED |
+| R5-4 orbit AM-GM `∏_s P(S^s y) ≤ P̄_O^n` (safe direction) | PROVED + VERIFIED |
+| R5 marginals-insufficient: cap `∏_i bias_i ≥ ∏_i P(e_i)`, overshoots target | PROVED + VERIFIED |
+| (B3-a′) ⟸ **(★)** via R4-1 + R5-4 (orbit-average chain) | PROVED (reduction) |
+| **(★) residual ⇒ `P̄_O < G(O_1)` for orbit weight ≠ 1** | **OPEN — single scalar gap; certified 130/130** |
+| **(B3-a′) residual ⇒ `∏_s P(S^s y) < ∏_i P(e_i)` for `ham(y)≠1`** | **OPEN — ⟸ (★); certified 90/90** |
 | **(B3-b″) residual ⇒ `mb > 1/((n-1)²+1)` [⇒ (B3-b) `mb>1/n` via the chain]** | **OPEN — weaker than `1/n`; certified 90/90** |
 
 Combined construction (best `k=2` partition else `k=mn` cyclic): **0 failures** over 30,000+
