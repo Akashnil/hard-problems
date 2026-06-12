@@ -151,7 +151,52 @@ and relocates the third-coordinate bridge into a "full ≠ single-copy maxbias" 
   prove the STALL set empty (not just the all-1-dominated subset). See run_state.md Next(R7).
 - Files: `/tmp/round-6/scout-problem11-r6.md`, `survey-problem11-r6.md`, `approach-critic-problem11-r6.md`.
 
+## Round 8 RESULT (γ-dichotomy restructuring + Lemma 10; see proof-attempt-r8.md)
+**Angle chosen: Angle 1 of the R8 survey (the γ-dichotomy scaffold + Lemma 10), approved by the R8
+approach-critic gate.** Angle 2 (minΦ-increase / involution fixed-point) was RETHINK-gated and NOT
+built (refuted on the exact γ≥β stall set — see below).
+
+NEW proven this round (exact rational, built on r5 without regression):
+- **γ-DICHOTOMY (restructuring).** Exhaustive split on `γ=P(1ⁿ)/(P(0ⁿ)+P(1ⁿ))`:
+  - **Branch 1 (γ<β): FULLY CLOSED by Lemma 7.** B1 full-collapse (k=1, spanning path on one copy)
+    gives full realized n-maxbias `= γ`; so `γ<β ⟹ maxbias(P')=γ<β`. This is the direct content of a
+    PROVEN lemma (not a sweep). Covers ~95% of frustrated n=3 stalls (1805/1903 scale16; 653/685
+    scale12), incl. the R7 over-count witness seed 770 (γ=1/8<β=20/41; B1 realized maxbias=1/8 EXACT).
+  - **Branch 2 (γ≥β): OPEN** (the 1ⁿ-heavy ~5% residual).
+- **LEMMA 10 (NEW, fully proven, exact-verified).** For an INVOLUTION `π=π⁻¹` and `S={(i,n+π(i))}` on
+  `P²`, BOTH copies share the law `P(x)·P(π·x)/Z`, hence full 2n-realized maxbias = single-copy maxbias
+  of `P(x)·P(π·x)`. Mechanism: Lemma-0 per-edge collapse fixes copy-1 = `π⁻¹·x`; involution gives
+  `π⁻¹=π`; and `w(z)=P(z)P(π·z)` is π-symmetric (`w(π·z)=w(z)`) so the copy-0 and copy-1 marginals
+  coincide AS FUNCTIONS (this is where `π=π⁻¹` is load-bearing). Verified: all 4 involutions × 10-seed
+  battery, full2n==closed-form, copies identical. NON-involutions (3-cycles) are NOT copy-identical
+  (`copies_identical=False`); those require the k=3 cyclic B5 (Lemma 5), NEVER Lemma 10's k=2 form.
+- **B4 added to family F→F⁺, repairing a non-exhaustiveness defect.** Scale-16 seed 16832 (β=21/47,
+  γ=2/3≥β, NO symmetric pair) stalls EVERY member of old F={B1,B2,B3} (`family_reduces=None`); cleared
+  ONLY by B4 involution revperm `(2,1,0)` → full 2n-maxbias `79/204≈0.3873<β`, all 6 coords <β (EXACT).
+  B4 is load-bearing, not optional.
+
+## What blocks completion (the EXACT gap, R8 — Branch 2 / γ≥β)
+**γ≥β Closure (OPEN).** For frustrated P, β<1/2, γ≥β, some member of F⁺={B1,B2,B3,B4,B5} reduces full
+maxbias. NOT closed:
+- NO named single-member selection: AND-match{i*} clears only 54–72% of γ≥β stalls (27/97 have
+  match{i*}≥β); named-pair rules clear 7–11/20 (most-neg-cov 11/20, two-non-worst 8/20, two-smallest 7/20,
+  triple 7/20). 4th recurrence of the "true union, false mechanism" wall, now in Branch 2.
+- **minΦ-increase lever REFUTED (DEAD LEVER #7).** The Angle-2 plan "SOME involution strictly increases
+  minΦ_{ij}; only common fixed point is a point mass" fails on the EXACT γ≥β stall set: 2/97 (scale12),
+  5/106 (scale8), 3/98 (scale16). On those (seed 1219 biases (25/51,8/17,25/51), β=25/51<1/2, γ=10/19≥β)
+  EVERY involution-reweight gives minΦ≤baseline and maxbias≥0.50; the clearing move is match{1}, a
+  NON-involution. minΦ (=1−two-largest-biases) joins ψ, Σf(b_i), Φ-magnitude, Σb_i, tied-core averaging,
+  single-copy M_argmax on the dead-lever list. Do NOT use minΦ-increase or involution-orbit fixed-points.
+- F⁺ clears 0/20000 γ≥β stalls ×3 scales — DISCLOSED REGRESSION BACKSTOP ONLY, used in NO proof step.
+- Suggested future route (NOT built): a γ≥β-specific lower bound on singleton-match collateral via the
+  Lemma-3 formula (γ≥β lower-bounds the 11-corner mass p^{(ℓ)}_{11}) PAIRED with a routed fallback to a
+  named other member with a proved inequality. Not a separable sum / Σb_i / Φ-magnitude / minΦ; mover not
+  restricted to involutions.
+- Files: `/tmp/round-8/survey-problem11-r8.md`, `approach-critic-problem11-r8.md`; `/tmp/r8lib.py`,
+  `/tmp/r8probe*.py`.
+
 ## Files
+- `research_problem_set/problem_11/proof-attempt-r8.md` — Round 8 attempt (γ-dichotomy; Lemma 10; B4; gap).
 - `research_problem_set/problem_11/proof-attempt-r5.md` — Round 5 attempt (Angle 2; Lemma 8; gap).
 - `research_problem_set/problem_11/proof-partial.md` — proof of all proven components + sharp gap.
 - `/tmp/round-2/survey-problem11-r2.md` — full R2 survey (3 angles, mechanisms, checks).
