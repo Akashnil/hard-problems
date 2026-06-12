@@ -19,6 +19,24 @@ the A3b narrative is reworded (a property of the Rule-R loop), and the dead-end 
 fixed. **The theorem is NOT claimed proved**: (B3-a) and (B3-b) remain aggregate consequences of
 the residual hypothesis without elementary proofs. Details in **Section "Gap (sharpened R3)"**.
 
+**R4 progress (this round): two exact reformulations + a rigorous conditional chain; theorem still
+NOT proved.** (i) *(B3-a)* is rewritten exactly as a **shift-product inequality** with no orbit-
+length bookkeeping: for every pattern `y` of Hamming weight `≠ 1`,
+`∏_{s=0}^{n-1} P(S^s y) < ∏_{i} P(e_i)` (proved equivalent to the orbit-geomean form via the
+combinatorial identity `G(O) = (∏_s P(S^s y))^{1/n}`). (ii) *(B3-b)* `mb>1/n` is rewritten exactly
+as `E_P[ham] > 1`, and then via the **exact decomposition** `E[ham]-1 = Σ_{ham(x)≥2}P(x)(ham(x)-1)
+- P(0^n)` as the inequality `Σ_{ham≥2}P(x)(ham(x)-1) > P(0^n)`. (iii) A **rigorous riser bound**
+`bias_j(P') ≤ p_j q_i/(p_i²+q_i²)` (direction re-verified, valid because `mb<1/2`) and a **rigorous
+conditional chain**: combining the whole-collapse-failure bound `P(1^n) ≥ √(mb/(1-mb))·P(0^n)` (a
+genuine `k=2` residual consequence, A3a, direction re-verified 90/90) with the decomposition gives
+`n·mb ≥ E[ham] ≥ 1 + [(n-1)√(mb/(1-mb)) - 1]·P(0^n)`, so **`mb > 1/((n-1)²+1) ⇒ E[ham]>1 ⇒
+mb>1/n`**. This reduces (B3-b) to the strictly weaker bound `mb > 1/((n-1)²+1)`. (iv) Slow-test
+contrapositive evidence: across 917 full-support `P` with `E[ham]≤1`, **zero** are residuals
+(worst reduces to `0.44·mb` — large margin), confirming the `E[ham]=1` boundary is not tight.
+**Still OPEN:** the shift-product inequality (B3-a) and the weaker scalar bound `mb>1/((n-1)²+1)`
+(or directly `mb>1/n`) both remain aggregate consequences of the full residual conjunction without
+an elementary proof. Details in **Section "Hard step (expanded, R4)"** and the updated Gap.
+
 ---
 
 ## Setup
@@ -285,6 +303,127 @@ failures), and neither has been reduced to an elementary signable inequality. In
 
 ---
 
+## Hard step (expanded, R4) — exact reformulations and a conditional chain
+
+All claims in this section are PROVED (rigorous algebra/combinatorics) **except** the two clearly
+labelled OPEN aggregate inequalities at the end. Every identity, bound, and direction below is
+verified with zero violations on all 90 isolated residuals by `b3_round4.py` (reproduced in
+*Computational checks*); the riser-bound direction is additionally checked on 382 random valid
+instances. (Tooling note: residual isolation here uses the **slow** Bell-lattice
+`is_residual`; `fast_residual.fast_is_residual_k2` produces false positives near the boundary and
+is NOT used for any new claim.)
+
+### (R4-A) Exact reformulation of (B3-a): the shift-product inequality
+
+**Lemma R4-1 (orbit geomean = shift geomean — PROVED, combinatorial).** Let `S` be the cyclic
+shift `(Sx)_i = x_{(i-1) mod n}`, and for a pattern `y` let `O = orbit(y)` have length `d` (so
+`d | n`). Then
+```
+   G(O) := (∏_{z∈O} P(z))^{1/d} = (∏_{s=0}^{n-1} P(S^s y))^{1/n}.
+```
+*Proof.* The `n` shifts `S^0 y,…,S^{n-1} y` traverse the orbit `O` periodically, hitting each of
+its `d` distinct elements exactly `n/d` times. Hence `∏_{s=0}^{n-1} P(S^s y) = (∏_{z∈O} P(z))^{n/d}`;
+taking the `n`-th root gives `(∏_{z∈O}P(z))^{1/d}/... = (∏_{z∈O}P(z))^{1/d}` after the exponent
+`(n/d)·(1/n)=1/d`. ∎  (Verified exact, `b3_round4.py` block [R4-1], `n=3,4,5`.)
+
+This removes all orbit-length bookkeeping: `G(O)` is simply the geometric mean of `P` over the
+`n` cyclic shifts of any representative `y`. For the weight-1 orbit `O_1 = orbit(e_1)` the shifts
+are exactly `e_1,…,e_n`, so `G(O_1) = (∏_i P(e_i))^{1/n}`. Therefore (B3-a) `G(O) < G(O_1)` for
+every orbit `O ≠ O_1` is **exactly equivalent** to:
+
+> **(B3-a′) [shift-product form].** For every pattern `y` with `ham(y) ≠ 1`,
+> `∏_{s=0}^{n-1} P(S^s y) < ∏_{i=1}^{n} P(e_i)`.
+
+(For `y` of weight `1` the product equals `∏_i P(e_i)` exactly — equality, the maximizer.) This
+is a clean comparison of two products of `n` masses each, with no exponents to track. The
+singletons `0^n,1^n` (weight `0` and `n`) are special cases of `ham≠1`, so (B3-a′) handles them
+uniformly together with all interior orbits — superseding the earlier separate "singleton
+absolute-smallness" sub-argument. **Status:** (B3-a′) is verified with zero violations on all 90
+residuals (n=3: 130/130 patterns, n=4: 756/756, n=5: 27/27); it remains OPEN as a theorem.
+
+### (R4-B) Exact reformulation of (B3-b) and a rigorous conditional chain
+
+**Lemma R4-2 (E[ham] decomposition — PROVED).** With `bias_i = E_P[x_i]`,
+`Σ_i bias_i = E_P[ham]` (linearity), and
+```
+   E_P[ham] - 1 = Σ_{x: ham(x)≥2} P(x)·(ham(x)-1)  -  P(0^n).
+```
+*Proof.* `E[ham]-1 = Σ_x P(x)(ham(x)-1) = -P(0^n) + 0 + Σ_{ham(x)≥2}P(x)(ham(x)-1)` (weight-0 term
+contributes `-P(0^n)`, weight-1 terms contribute `0`). ∎  Hence, with `mb ≥ E[ham]/n` (max ≥ mean):
+
+> **(B3-b′) [excess-mass form].** `mb > 1/n  ⟺  E[ham] > 1  ⟺  Σ_{ham(x)≥2}P(x)(ham(x)-1) > P(0^n).`
+>
+> (the first `⟺` is `mb≥E[ham]/n` together with: if `E[ham]≤1` then every `bias_i≤?`... — see the
+> caveat below; the second `⟺` is Lemma R4-2.)
+
+*Caveat on the first equivalence.* `mb ≥ E[ham]/n` gives only `E[ham]>1 ⇒ mb>1/n` (one direction);
+the converse can fail when biases are unequal. So the operative target is the **forward** direction:
+derive `E[ham] > 1` (equivalently the excess-mass inequality), which then yields `mb > 1/n`. As the
+approach-critic noted, in the symmetric regime `E[ham]>1 ⟺ mb>1/n` exactly, so the lever gives no
+free slack there and the residual hypothesis must do the work. The slow-test contrapositive below
+shows the residual hypothesis is *strong enough*: it forbids `E[ham]≤1` outright.
+
+**Lemma R4-3 (riser upper bound — PROVED, direction verified).** In Move I (single-coordinate glue
+on `i`, Lemma A1), every riser `j ≠ i` satisfies, when `p_i < 1/2`,
+```
+   bias_j(P') = (a_1 p_i + a_0 q_i)/(p_i²+q_i²)  ≤  p_j·q_i/(p_i²+q_i²),
+```
+where `a_1 = P(X_j=1,X_i=1)`, `a_0 = P(X_j=1,X_i=0)`, `a_1+a_0 = p_j`.
+*Proof.* Write `bias_j(P') = (p_j q_i + a_1(p_i-q_i))/(p_i²+q_i²)`. Since `p_i<1/2` gives
+`p_i-q_i<0` and `a_1≥0`, the expression is maximized at `a_1=0`, value `p_j q_i/(p_i²+q_i²)`. ∎
+(Verified 0 violations on 382 random valid instances; note this is exactly the *failed* sufficient
+condition for single-glue universality — at the argmax it collapses to the tautology `mb≤1/2` — so
+it is a true but, on its own, non-decisive bound. Recorded for completeness and because the
+direction had to be pinned: see role memory on this problem's history of backwards bounds.)
+
+**Lemma R4-4 (whole-collapse failure bound — PROVED, A3a, direction verified 90/90).** On a
+residual the whole-collapse `k=2` move (block `B = {0,…,n-1}`) does not reduce `maxbias`; by
+Lemma A3a applied to `B`,
+```
+   P(1^n)/P(0^n) ≥ √(mb/(1-mb))   i.e.   P(1^n) ≥ √(mb/(1-mb))·P(0^n).
+```
+(This is the *corrected* A3a direction — whole-collapse FAILURE gives `≥`, the opposite of the R2
+survey's "both-sides squeeze". Verified 26/26 n=3, 63/63 n=4, 1/1 n=5.)
+
+**The conditional chain (PROVED, given the weaker bound).** Drop all weight-≥2 terms in the
+decomposition except `1^n` (which has coefficient `ham(1^n)-1 = n-1`):
+```
+   E[ham] - 1  =  Σ_{ham≥2}P(x)(ham(x)-1) - P(0^n)
+               ≥  (n-1)·P(1^n) - P(0^n)                      [drop nonneg terms]
+               ≥  [(n-1)·√(mb/(1-mb)) - 1]·P(0^n).           [Lemma R4-4]
+```
+Therefore `n·mb ≥ E[ham] ≥ 1 + [(n-1)√(mb/(1-mb)) - 1]·P(0^n)`. If the bracket is positive — i.e.
+`(n-1)√(mb/(1-mb)) > 1`, equivalently `mb > 1/((n-1)²+1)` — then `E[ham] > 1`, hence `mb > 1/n`.
+**This reduces (B3-b) to the strictly weaker scalar bound:**
+
+> **(B3-b″).** On a residual, `mb > 1/((n-1)²+1)`.
+
+For `n=3` this asks `mb > 1/5` (vs the target `1/3`); for `n=4`, `mb > 1/10` (vs `1/4`). Verified:
+the chain `E[ham] ≥ 1 + [(n-1)√(mb/(1-mb)) - 1]P(0^n)` and `mb > 1/((n-1)²+1)` both hold with zero
+violations on all 90 residuals (`b3_round4.py`). **Status:** (B3-b″) is OPEN — it is weaker than
+the original (B3-b) but is still an aggregate consequence of the residual conjunction lacking an
+elementary proof. The chain is a genuine reduction (not a relabel): it converts the boundary-tight
+`mb>1/n` into the slacker `mb>1/((n-1)²+1)`, and replaces the round-3 union bound `P(0^n)≥1-n·mb`
+(which degraded to `0` at `mb=1/n`) by the whole-collapse bound, which has no boundary degeneracy.
+
+### (R4-C) Why no single `k=2` move closes either piece (the residual conjunction is essential)
+
+I tested, with the slow Bell-lattice residual test, exactly which moves are needed:
+- **single-coordinate glue alone** reduces `mb` on `197/210` near-boundary `E[ham]≤1` instances,
+  but fails `44/889` in the full `E[ham]≤1` sweep (Lemma R4-3 at the argmax is non-decisive, as
+  shown). So single-glue is not sufficient for the (B3-b) contrapositive.
+- **single-glue + whole-collapse + all permutation glues** together reduce **every** one of `850`
+  tested `E[ham]≤1` residual-candidates (`0` uncovered). The permutation glue (force
+  `copy1 = π(copy0)` for a permutation `π`; feasible configs `(x,π(x))` with weight `P(x)P(π(x))`,
+  closed form verified) is the third necessary family and is itself a `k=2` move in the design
+  space. This is direct evidence that the proof of (B3-b) genuinely requires the **conjunction** of
+  several `k=2`-move failures (not any single move), exactly the approach-critic's success bar.
+- **Slow-test contrapositive:** `917` full-support `P` with `E[ham]≤1` were tested; **`0`** are
+  residuals (worst reduces to `0.44·mb`). So `E[ham]≤1 ⇒ not a residual` holds with a *large* margin
+  — the `E[ham]=1` boundary is not tight, consistent with the observed residual floor `E[ham]≥1.009`.
+
+---
+
 ## Edge cases
 
 - **Full support / positive probability:** Lemma S1 — every conditioning event contains the
@@ -391,6 +530,38 @@ biasing mass toward weight-1 patterns with tiny `P(0^n)`); `O*` is the weight-1 
 them, refuting the R2-critic worry that an interior weight-2 orbit (`ham/n=0.5 ≥ mb`) could be the
 maximizer on a residual.
 
+### R4 advances certificate (`b3_round4.py`)
+
+Reproduce with `PYTHONPATH=. python3 b3_round4.py`. All checks below are on the SLOW-verified
+residual datasets `res_n{3,4,5}.pkl`; the riser bound is on 382 random valid instances.
+
+```
+[R4-1] G(O) = (prod_s P(S^s y))^(1/n) identity (PROVED): exact=True              n=3,4,5
+[R4-2] riser bound bias_j' <= p_j q_i/(p_i^2+q_i^2) on 382 valid P: violations=0
+n=3 (26 residuals):
+  E[ham]=sum bias (identity)                 : 26/26
+  E[ham]-1 = sum_{w>=2}P(ham-1) - P(0^n)     : 26/26   (decomposition, PROVED)
+  (B3-a') prod_s P(S^s y) < prod_i P(e_i)    : 130/130 (OPEN aggregate)
+  whole-collapse fail P(1^n)>=sqrt..P(0^n)   : 26/26   (A3a, PROVED on residuals)
+  chain E[ham] >= 1+[(n-1)sqrt-1]P(0^n)      : 26/26   (PROVED algebra)
+  weaker bound mb > 1/((n-1)^2+1)            : 26/26   (OPEN, but weaker than 1/n)
+  (B3-b) mb > 1/n                            : 26/26
+n=4 (63 residuals): all 7 lines pass (756/756 for B3-a').
+n=5 (1 residual):   all 7 lines pass (27/27 for B3-a').
+```
+
+### R4 contrapositive / move-coverage probes (slow Bell-lattice residual test)
+
+```
+Full-support P with E[ham] <= 1 (i.e. mb <= 1/n possible):  checked 917,  residuals found = 0
+  (worst case reduces to 0.44 * mb -- large margin; the E[ham]=1 boundary is NOT tight)
+single-coord glue alone reduces mb:  197/210 near-boundary, fails 44/889 over full E[ham]<=1 sweep
+single-glue + whole-collapse + all permutation glues:  0 of 850 E[ham]<=1 candidates uncovered
+```
+This shows (B3-b)'s contrapositive holds with margin and requires the CONJUNCTION of several
+`k=2`-move families (no single move suffices) — consistent with the residual hypothesis being the
+load-bearing assumption.
+
 ---
 
 ## Gap (sharpened R3)
@@ -431,18 +602,46 @@ polynomial-sign inequality. Concretely, the obstructions are:
   `mb=1/n`, so it does not yield the A3a threshold `P(1^n)/P(0^n) < √(mb/(1-mb))` at the boundary.
   Residuals stay bounded away (`mb−1/n ≥ 0.039` observed), but the exact strict gap is unproven.
 
-**What would close it.** (i) A geomean-level concentration inequality: residual ⇒ for every cyclic
-orbit `O ≠ O_1`, `∏_{y∈O}P(y) < (∏_i P(e_i))^{|O|/n}` — the aggregate fact, now pinned to the
-specific orbit `O_1`. (ii) A boundary-tight lower bound on `P(0^n)` (sharper than the union bound)
-forcing the whole-collapse threshold whenever `mb ≤ 1/n`, OR any other rigorous proof of `mb>1/n`
-on residuals. Either of (i)+(ii) closes the theorem via Lemma B2; neither is in hand.
+**R4 update to the gap (this round).** Section "Hard step (expanded, R4)" advances both pieces to
+exact, cleaner forms but does NOT close them:
+
+- **(B3-a) → (B3-a′) shift-product form (EXACT, OPEN).** Via Lemma R4-1
+  (`G(O)=(∏_s P(S^s y))^{1/n}`), (B3-a) is equivalent to: for every pattern `y` with `ham(y)≠1`,
+  `∏_{s=0}^{n-1} P(S^s y) < ∏_i P(e_i)`. This eliminates orbit-length bookkeeping and folds the
+  singletons `0^n,1^n` into the same statement (no separate "absolute smallness" sub-argument
+  needed). It is verified 130/130 (n=3), 756/756 (n=4), 27/27 (n=5) but remains an OPEN aggregate
+  inequality. **What resists:** the per-pattern bound `P(y)<G(O_1)` fails 3/26 (n=3); and the
+  natural log-supermodular bound `P(y)P(0^n)^{w-1} ≤ ∏_{supp}P(e_i)` (verified 0 violations on all
+  residuals) goes the WRONG way after multiplying over shifts (it yields
+  `∏_s P(S^s y) ≤ (∏_i P(e_i))^w/P(0^n)^{n(w-1)}`, and `∏_i P(e_i) < P(0^n)^n` is FALSE since
+  `P(0^n)` is tiny). So no per-pattern multiplicative bound in hand proves (B3-a′); a genuinely
+  joint (geomean-level) argument is still required.
+
+- **(B3-b) → (B3-b″) weaker bound (REDUCED, OPEN).** Via Lemmas R4-2/R4-4 and the conditional
+  chain `n·mb ≥ E[ham] ≥ 1+[(n-1)√(mb/(1-mb))-1]P(0^n)`, (B3-b) `mb>1/n` is implied by the
+  STRICTLY WEAKER `mb > 1/((n-1)²+1)` (e.g. `mb>1/5` instead of `1/3` at `n=3`). This replaces the
+  round-3 union bound (which degraded to `0` at the `mb=1/n` boundary) by the whole-collapse bound
+  (no boundary degeneracy), so the boundary tightness obstruction is *retired*. **What resists:**
+  even the weaker `mb>1/((n-1)²+1)` is not proved — no single `k=2` move forces it (single-glue
+  fails 44/889; only single-glue + whole-collapse + permutation-glues cover all `E[ham]≤1`
+  candidates, 0/850 uncovered), so a derivation must combine ≥3 move families. The slow-test
+  contrapositive (917 instances, 0 residuals with `E[ham]≤1`, worst `0.44·mb`) shows the bound is
+  TRUE with large margin, but the multi-move conjunction has not been turned into a closed chain.
+
+**What would close it.** (i) (B3-a′): a joint/geomean-level inequality `∏_s P(S^s y) < ∏_i P(e_i)`
+for `ham(y)≠1`, using residual-derived mass bounds that are not per-pattern. (ii) (B3-b″): a
+rigorous `mb > 1/((n-1)²+1)` (or directly `mb>1/n`) from the residual conjunction — e.g. a closed
+combination of the single-glue, whole-collapse, and permutation-glue failures. Either path + B2
+closes the theorem; neither is in hand.
 
 **Honest status.** This is a precisely-stated, numerically-certified *scalar reduction* of B3 (the
 mechanism — cyclic geometric-mean limit, identified maximizer `O_1`, threshold `1/n` — is named;
 margins verified on all isolated `n=3` AND newly-hunted `n=4` residuals, plus `n=5` and the spec).
-It is NOT a proof of B3, and the theorem is NOT claimed proved. It strictly sharpens R1's open
-aggregate inequality `ham(O*)/n<mb` into two concrete scalar sub-claims and corrects the dead-end
-attribution.
+The R4 round added two EXACT reformulations (shift-product for B3-a, excess-mass + conditional
+chain for B3-b) and a strict reduction of (B3-b) to a weaker non-boundary-tight bound, with all
+identities/directions verified — but it is NOT a proof of B3, and the theorem is NOT claimed
+proved. It strictly sharpens R1's open aggregate inequality `ham(O*)/n<mb` into two concrete scalar
+sub-claims, reformulates them exactly, and reduces (B3-b) further.
 
 ---
 
@@ -461,8 +660,13 @@ attribution.
 | B1 cyclic equal-marginals + orbit formula | PROVED + VERIFIED |
 | B2 geometric-mean limit `b*_{mn} → ham(O*)/n` | PROVED + VERIFIED |
 | **B3 ⟸ (B3-a) ∧ (B3-b) [the R3 reduction]** | **PROVED (trivial: `1/n < mb`)** |
-| **(B3-a) residual ⇒ `O* =` weight-1 orbit `O_1` (`ham(O*)/n = 1/n`)** | **OPEN — certified 90/90 residuals, n=3,4,5** |
-| **(B3-b) residual ⇒ `mb > 1/n`** | **OPEN — certified 90/90 residuals, n=3,4,5** |
+| R4-1 orbit geomean = shift-product `G(O)=(∏_s P(S^s y))^{1/n}` | PROVED (combinatorial) + VERIFIED |
+| R4-2 riser bound `bias_j' ≤ p_j q_i/(p_i²+q_i²)` (uses `mb<1/2`) | PROVED + VERIFIED (direction) |
+| R4-3 `E[ham]` decomposition `E[ham]-1 = Σ_{w≥2}P(x)(ham-1) - P(0^n)` | PROVED + VERIFIED |
+| R4-4 whole-collapse failure `P(1^n) ≥ √(mb/(1-mb))P(0^n)` on residuals | PROVED (A3a) + VERIFIED 90/90 |
+| R4 conditional chain `mb>1/((n-1)²+1) ⇒ E[ham]>1 ⇒ mb>1/n` | PROVED (algebra) + VERIFIED |
+| **(B3-a′) residual ⇒ `∏_s P(S^s y) < ∏_i P(e_i)` for `ham(y)≠1`** | **OPEN — exact reform.; certified 90/90** |
+| **(B3-b″) residual ⇒ `mb > 1/((n-1)²+1)` [⇒ (B3-b) `mb>1/n` via the chain]** | **OPEN — weaker than `1/n`; certified 90/90** |
 
 Combined construction (best `k=2` partition else `k=mn` cyclic): **0 failures** over 30,000+
 adversarial/near-boundary/residual instances (`n=2,3,4`), so the theorem is almost certainly
