@@ -127,6 +127,30 @@ Empirical-with-exception (28/29 over 20k seeds, the exception being the non-symm
 when match-{i*} fails, the rising offender j sits in a symmetric pair with i*. This is the F3-shape the
 critic forbade asserting as a closed form; recorded only as a conjecture.
 
+## Round 6 RESULT (Angle 1 = iterated M_argmax — KILLED pre-build by approach-critic)
+A candidate "breakthrough" (problem-scout): iterate `M_argmax` — match the current worst coordinate
+across two fresh copies, realize as a nested `k=2^T` AND-tree. It appeared to clear 100% of all
+in-hypothesis + adversarial cases with only termination open, "dissolving" the subset-selection wall.
+**REFUTED (approach-critic R6, exact-rational):** the load-bearing realizability step "all `2^T` copies
+share the single-copy law `P_T`, so `maxbias(P')=maxbias(P_T)`" is FALSE whenever the matched coordinate
+SWITCHES between steps (`i_t≠i_{t-1}`, the dominant case). Copy-0's law equals `P_T`, but the other
+copies keep intermediate marginals (tied to copy-0 only on the EARLIER coordinate), so the FULL maxbias
+of the realized conditioning exceeds `maxbias(P_T)`; in 38/42 multi-step n=3 cases it stays ABOVE the
+original β. The scout/surveyor "100% clearance" measured the single-copy iterate `P_T` — a fiction, not
+the maxbias of any realizable `(k,S)` (violates the round-1 standing rule). The ONLY all-copies-identical
+nested repeat is the SAME-coordinate one, which equals the dead L^k all-agreement tilt (Angle 4, diverges
+to the mode). **The argmax rule does NOT dissolve the wall — coordinate-switching destroys realizability
+and relocates the third-coordinate bridge into a "full ≠ single-copy maxbias" gap.** DEAD: do not revive.
+- NEW verified byproduct (keep): **Lemma 9** — one `M_i` step keeps every collateral coord `<1/2`
+  (`(1−b_i)b_j/Z ≤ (1−b_i)b_i/Z < 1/2 ⟺ b_i(1−b_i)<1/4`, one line; 0/20000). Step inequality
+  (`b_i↦b_i²/Z=b_i·ρ(b_i)`, ρ<1 increasing on [0,1/2)) and the signed collateral bound are correct, but
+  concern only the single-copy iteration.
+- Separable convex potentials `Σf(b_i)` (f∈{b,b²,b/(1−b)}, ∏1/(1−2b_i), 2-largest) ALL INCREASE under one
+  `M_argmax` step on the adversarial anti-correlated family (n7 1123/1123, n10 777/777) — DEAD as descent.
+- Next: Angle 2 (non-constructive) targeting FULL realized maxbias over the all-copies-identical family;
+  prove the STALL set empty (not just the all-1-dominated subset). See run_state.md Next(R7).
+- Files: `/tmp/round-6/scout-problem11-r6.md`, `survey-problem11-r6.md`, `approach-critic-problem11-r6.md`.
+
 ## Files
 - `research_problem_set/problem_11/proof-attempt-r5.md` — Round 5 attempt (Angle 2; Lemma 8; gap).
 - `research_problem_set/problem_11/proof-partial.md` — proof of all proven components + sharp gap.
