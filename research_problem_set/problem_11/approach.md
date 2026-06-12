@@ -86,7 +86,49 @@ reduce to a scalar — it needs only that SOME operator reduces, exactly the the
 Spec review REQUIRED before build (top angle is novel non-constructive; the obvious instantiation fails
 the litmus). Litmus P/217 MUST be reduced by any constructive claim (Gram on {0,1} → 0.4544).
 
+## Round 5 RESULT (built Angle 2; see proof-attempt-r5.md)
+**Angle chosen: Angle 2** (non-constructive existence on the bounded symmetric residual — committed by
+approach-critic R5, `/tmp/round-5/approach-critic-problem11-r5.md`, which RETHINK-killed Angle 1: F3 is
+FALSE as a closed form (Litmus C) and the matching-family contraction is non-uniform).
+
+NEW proven this round:
+- **Lemma 8 (NEW, fully proven, one line + sympy).** Exact identity `Pr(x_i=1,x_j=1)−Pr(x_i=0,x_j=0)
+  = b_i+b_j−1`. Hence under `β<1/2`, EVERY pair (symmetric or not) is strictly 0-dominated
+  `Pr(00)>Pr(11)`, i.e. `Φ_{ij}=1−b_i−b_j>0`. Strengthens the critic's empirical "all-1-dominated stall
+  empty (0/110k)" into a LOGICAL IMPOSSIBILITY needing no sweep.
+- **C1 (necessary half of Angle-2 contradiction): proved.** The "γ≥β ∧ all symmetric pairs 1-dominated"
+  premise cannot occur under β<1/2 — by Lemma 8, no pair is ever 1-dominated. The would-be contradiction
+  class is empty by a closed identity.
+- **C2: proved.** Lemma 6's firing condition `a>d` holds AUTOMATICALLY on every symmetric pair (Lemma 8),
+  so symmetric-Gram always reduces the targeted PAIR's two biases unconditionally. Pair level is never
+  the obstruction.
+- **C3:** `Φ_{ij}=1−b_i−b_j` is the verified maxbias-IMPLYING potential the critic required (b_i,b_j<1/2
+  ⟺ Φ_{ij}>0); it is none of the forbidden ψ=log ΣP² / sum-odds / Lᵖ-odds.
+- Litmus A/B/C each DISCHARGED by a NAMED operator (A: k=3 cyclic →746/1987; B: match{1}→0.45215;
+  C: match{0,2}→0.42495). C and B are non-symmetric residuals cleared by identity-match (NOT F3).
+
+## What blocks completion (the EXACT gap, R5 — supersedes the R2 "Residual inequality")
+**Bridge Lemma / stall-set incompatibility (OPEN).** Need: for frustrated P, β<1/2, γ≥β, SOME member of
+F={collapse, identity-match on a subset T, symmetric-Gram on a symmetric pair, k≤3 permuted/cyclic}
+drives ALL n single-copy biases <β. The pairwise potential Φ>0 (Lemma 8) and the pair reduction
+(Lemma 6) are proven, but the descent from "Φ>0 on every pair" to "FULL maxbias drops" is NOT closed:
+a pair-reducing move can raise a THIRD coordinate ℓ≥β (exact witnesses: seeds 8356, 9350 — Gram on every
+pair fails on the third coord). Empirically the clearing move on the named-family stalls is a PAIR
+identity-match T={i,j}, but the winning pair is selected by NO tested named criterion (NOT most-negative
+covariance: seed 9350 clears on cov −0.099 while the most-negative pair −0.122 fails). So the closure is
+an un-routed oracle over 2ⁿ−1 subsets — FORBIDDEN as proof. This is the recurring "true union, false
+mechanism" wall (4th round). Closure routes still open: (a) a CLOSED-FORM named pair-selection + its
+collateral inequality (Lemma 3 collateral for pair-match bounds the third coord in closed form — the
+missing step is a uniform "some named pair makes all three <β"); or (b) a monotone descent on Φ
+(increase min_{ij}Φ_{ij}) by some F-member — tied-set iteration is NOT it (diverges 67/7420).
+
+## CONJECTURE (labelled, NOT used in any proof step)
+Empirical-with-exception (28/29 over 20k seeds, the exception being the non-symmetric Litmus-C residual):
+when match-{i*} fails, the rising offender j sits in a symmetric pair with i*. This is the F3-shape the
+critic forbade asserting as a closed form; recorded only as a conjecture.
+
 ## Files
+- `research_problem_set/problem_11/proof-attempt-r5.md` — Round 5 attempt (Angle 2; Lemma 8; gap).
 - `research_problem_set/problem_11/proof-partial.md` — proof of all proven components + sharp gap.
 - `/tmp/round-2/survey-problem11-r2.md` — full R2 survey (3 angles, mechanisms, checks).
-- Verifying scripts: `/tmp/scout2.py`, `/tmp/r2probe*.py` (Gram closed form, squaring failure, family).
+- Verifying scripts: `/tmp/scout2.py`, `/tmp/r5lib.py`, `/tmp/r2probe*.py`.
