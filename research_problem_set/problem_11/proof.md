@@ -6,12 +6,18 @@ plus the whole-copy collapse); BACKSTOP = `k = mn` cyclic glue on the anti-corre
 The committed target (critic's "single cleanest target") is to prove `maxbias(P') < maxbias(P)`
 **directly**, never through the refuted `Φ_p` power-mean potential.
 
-**Status:** INCOMPLETE — blocked at the BACKSTOP inequality (Lemma B3). All other steps are
-closed rigorously: the reduction to partitions, well-definedness, the two exact closed-form
-marginal maps, the diagonal odds-squaring contraction (the sole use of `maxbias<1/2`), the
-whole-collapse sufficient condition, and the exact orbit/limit formula for the cyclic glue.
-The single remaining gap is one precisely-stated combinatorial inequality on the residual,
-isolated below in **Section "Gap"**.
+**Status:** INCOMPLETE — blocked at the BACKSTOP (Lemma B3). All other steps are closed
+rigorously: the reduction to partitions, well-definedness, the two exact closed-form marginal
+maps, the diagonal odds-squaring contraction (the sole use of `maxbias<1/2`), the whole-collapse
+sufficient condition, the Rule-R loop, and the exact orbit/limit formula for the cyclic glue.
+**R3 progress:** Lemma B3 is now *reduced* to two concrete scalar sub-claims — **(B3-a)** the
+geometric-mean-maximizing cyclic orbit is the weight-1 orbit `O_1` (so `ham(O*)/n = 1/n`), and
+**(B3-b)** `mb > 1/n` — which trivially give `ham(O*)/n = 1/n < mb`. Both are certified with zero
+violations on every isolated residual at `n=3,4,5` (90 residuals total, incl. newly-exhibited
+`n=4` cases), the Step-2 mechanism is corrected (mass-smallness, not the backwards A3a squeeze),
+the A3b narrative is reworded (a property of the Rule-R loop), and the dead-end attribution is
+fixed. **The theorem is NOT claimed proved**: (B3-a) and (B3-b) remain aggregate consequences of
+the residual hypothesis without elementary proofs. Details in **Section "Gap (sharpened R3)"**.
 
 ---
 
@@ -131,11 +137,18 @@ has marginal `Σ_v Pr(E_B,v)·P(X_u=1|block=v) = Σ_v A_v²·(Su_{v,u}/A_v) = Σ
 whole-collapse all coordinates are in `B`, so this single inequality controls all `n` marginals
 simultaneously. ∎
 
-**Lemma A3b (absorbing kills the riser reweighting).** When a riser `j` is moved *into* `B`, its
-marginal switches from the conditional form `(a_1 p + a_0 q)/Z` of Lemma A1 (which has no `1/2`
-cap and can exceed `mb`) to the squared-block form `A_1²/Z` of Lemma A3, which is `<mb` exactly
-under the explicit polynomial condition of Lemma A3a. This is the precise mechanism by which
-absorbing a harmful riser removes its `q_i/p_i` overshoot. ∎
+**Lemma A3b (the Rule-R loop, restated correctly — REWORDED R3).** Absorbing a riser `j` into the
+block `B` switches `j`'s marginal from the conditional form `(a_1 p + a_0 q)/Z` of Lemma A1 (no
+`1/2` cap, can exceed `mb`) to the squared-block form `A_1²/Z` of Lemma A3 (`< mb` exactly under
+the explicit polynomial condition of Lemma A3a). **Caveat (verified by the R1 critic):** a single
+absorption is **not** coordinate-monotone — moving `j` into `B` can lift some *other*, previously
+safe coordinate `u ∉ B` above `mb` (65 such "new-riser" events in 30000 trials). So absorption does
+not, by itself, "kill the riser." The object that is correct is the **Rule-R loop** (below), which
+**re-checks all coordinates each round** and re-absorbs any coordinate (old or newly created) whose
+Lemma-A3 marginal is `≥ mb`. Because `B` strictly grows on every non-terminal round, the loop
+terminates in `≤ n` rounds; when it halts it does so with **all** `nk` marginals `< mb`, and only
+then is the partition output. Thus the correct load-bearing statement is a property of the loop,
+not of any single absorption. ∎
 
 **Explicit `k=2` rule R (the TARGET LEMMA construction).** Start `B = {i*}`. Repeat: compute the
 Lemma-A3 marginals; if some coordinate `u ∉ B` has `bias_u(P') ≥ mb`, add all such `u` to `B`
@@ -190,8 +203,10 @@ is the finite-`m` rate near orbit ties). ∎
 then by Lemma B2 there is a finite `m` with `b*_{mn} < mb`, and Move III at `k = mn` reduces
 `maxbias`. Reducing the BACKSTOP to a *single combinatorial inequality* on the residual:
 
-> **Lemma B3 (OPEN).** If no `k=2` partition reduces `maxbias(P)` (the residual), then the
-> max-geometric-mean cyclic orbit satisfies `ham(O*)/n < mb` (tie-average strictly below `mb`).
+> **Lemma B3 (OPEN — reduced R3).** If no `k=2` partition reduces `maxbias(P)` (the residual),
+> then the max-geometric-mean cyclic orbit satisfies `ham(O*)/n < mb` (tie-average strictly below
+> `mb`). **R3 reduction:** this follows from the two certified scalar sub-claims **(B3-a)** `O* =`
+> the weight-1 orbit `O_1` (so `ham(O*)/n = 1/n`) and **(B3-b)** `mb > 1/n` (see Hard step (2)).
 
 ---
 
@@ -201,24 +216,72 @@ The two hard steps are the riser control (Move II) and the backstop (Lemma B3).
 
 **(1) Riser control — CLOSED.** Lemma A1 isolates the riser term `bias_j(P') = (a_1 p + a_0 q)/Z`,
 a *conditional* average with no `1/2` cap, which is the scout's central obstruction. The
-mechanism that defeats it is Lemma A3b: moving `j` into `i*`'s constant block replaces this
-conditional by the squared-block odds `(A_1/A_0)²`, whose reduction below `mb` is the **explicit
-polynomial inequality** `A_1²(1-mb) < mb·A_0²` (Lemma A3a). This is fully rigorous and signable.
-It closes every instance for which the grown block `B` ends with `A_1/A_0 < √(mb/(1-mb))` — i.e.
-for which the all-block-ones pattern is sufficiently rare relative to all-block-zeros. The
-mechanism is exactly "the diagonal odds-squaring (the only use of `mb<1/2`) dominates, once the
-harmful conditional reweighting is removed by absorption."
+mechanism that defeats it is the **Rule-R loop** (Lemma A3b, reworded R3): each absorption
+replaces a riser's conditional marginal by the squared-block odds `(A_1/A_0)²`, whose reduction
+below `mb` is the **explicit polynomial inequality** `A_1²(1-mb) < mb·A_0²` (Lemma A3a). A single
+absorption is *not* coordinate-monotone (it can create a new riser), so it is the loop — which
+re-checks all coordinates each round, terminates in `≤ n` rounds since `B` strictly grows, and
+outputs only when **all** marginals are `< mb` — that is correct. The mechanism is "the diagonal
+odds-squaring (the only use of `mb<1/2`) dominates, once the harmful conditional reweighting is
+removed by absorption, iterated to a fixed point."
 
-**(2) Backstop — derivation up to the open inequality.** Lemmas B1–B2 turn Move III into the
-purely combinatorial quantity `ham(O*)/n`. The remaining content is Lemma B3: the residual
-condition forces the maximum-geometric-mean cyclic orbit to be *low Hamming weight*. The
-structural reason (anti-correlation): if no `k=2` partition reduces `maxbias`, then in particular
-the whole-collapse failed, i.e. `A_1/A_0 = P(1^n)/P(0^n) ≥ √(mb/(1-mb))` is *not* what fails
-alone — rather every block collapse and every single glue failed, which empirically forces the
-joint mass onto low-weight patterns whose orbits dominate the geometric mean. I could **not**
-convert this chain into a proof of Lemma B3 (see Gap). I verified (Certificate set below) that
-on every residual instance found, `ham(O*)/n < mb` holds with substantial margin (`b*` clusters
-near `1/3` for `n=3`, margin `≥ 0.097`).
+**(2) Backstop (Lemma B3) — new structural reduction (R3), reduced to two certified scalar
+sub-claims.** Lemmas B1–B2 turn Move III into the purely combinatorial quantity `ham(O*)/n`,
+where `O*` maximizes the orbit geometric mean `G(O) = (∏_{y∈O} P(y))^{1/|O|}`. The R3 work
+sharpens "`O*` is low Hamming weight" into an **explicit identification of `O*` plus a scalar
+threshold on `mb`**, and corrects the recorded dead-end attribution. Let
+`O_1 := orbit(e_1) = {e_1, …, e_n}` be the **weight-1 cyclic orbit** (the cyclic shift `S` sends
+`e_1 ↦ e_2 ↦ … ↦ e_n ↦ e_1`, so all `n` standard basis vectors form one orbit), with
+`G(O_1) = (∏_{i=1}^n P(e_i))^{1/n}` and `ham(O_1)/n = 1/n`. I reduce Lemma B3 to:
+
+> **(B3-a)** On a residual, `O_1` is the **unique** geometric-mean-maximizing cyclic orbit; hence
+> `O* = O_1` and `ham(O*)/n = 1/n` (no ties).
+>
+> **(B3-b)** On a residual, `mb > 1/n`.
+
+Trivially **(B3-a) ∧ (B3-b) ⇒ `ham(O*)/n = 1/n < mb`**, which is exactly Lemma B3 (the
+tie-average degenerates to the single value `1/n` by (B3-a)). This is strictly more structure than
+R1's "the aggregate `ham(O*)/n < mb`": both sub-claims are *concrete scalar* statements, and the
+geometric-mean quantity is pinned to a known orbit.
+
+**Correction of the recorded dead end.** R1/R2 recorded "orbit-vs-complement `G(O) ≥ G(Ō)` is
+false on residuals." I verified the precise content (script `probe_ovc.py`): the failing pair is
+the **singleton pair** `(0^n, 1^n)` — `G(0^n) ≥ G(1^n)` fails on 21/26 `n=3` residuals (because
+anti-correlation makes `P(1^n) ≥ P(0^n)`). **But that pair is irrelevant to identifying `O*`:**
+both singletons have *absolutely tiny* geomean (Step 2 below) and lose to the interior orbits.
+The comparison that actually matters, **weight-1 orbit vs. weight-2 orbit**, *holds* on every
+residual (26/26 at `n=3`; and at `n=4,5` the weight-1 orbit's geomean exceeds the runner-up orbit
+by a factor `≥ 1000`, i.e. runner-up/winner ≤ 0.0011). So the dead end was mis-attributed; the
+relevant ordering is not dead.
+
+**Step 2 (corrected R3 — singletons are not the maximizer, for the mass-smallness reason).** The
+R2 survey's "A3a both-sides squeeze" justification is *wrong* (it had the A3a inequality backwards:
+whole-collapse failure gives `P(1^n)/P(0^n) ≥ √(mb/(1-mb))`, the *opposite* direction). The
+correct content is: **on a residual `P(0^n)` and `P(1^n)` are small in absolute value**, so the
+singleton orbits `{0^n}` (geomean `P(0^n)`) and `{1^n}` (geomean `P(1^n)`) lose the geometric-mean
+maximization to the interior weight-1 orbit. Numerically (`probe_struct.py`): on `n=3,4` residuals
+`P(0^n), P(1^n) ≤ 6·10⁻³` while `G(O_1) ∈ [0.07, 0.32]` — three to four orders of magnitude larger.
+This absolute-smallness is itself a *piece* of the open concentration content (it is **not** a free
+A3a corollary), so Step 2 is folded into Step 3, not logged as an independent closed lemma.
+
+**Step 3 (the gate — still open, sharply reduced).** (B3-a) and (B3-b) are each TRUE with zero
+violations on every independently-isolated residual (n=3: 26/26, n=4: 63/63, n=5: 1/1; spec
+residual included), with margins `mb − 1/n ≥ 0.039` and runner-up/winner geomean `≤ 0.0011` — see
+`b3_certificate.py` reproduced below. They are the genuine remaining content: each is an
+**aggregate consequence of the full residual hypothesis** (the conjunction of all `k=2`-partition
+failures), and neither has been reduced to an elementary signable inequality. In particular:
+
+- *(B3-b) attempt.* The contrapositive `mb ≤ 1/n ⇒ not a residual` is supported by the
+  **whole-collapse**: on every tested `P` with `mb ≤ 1/n` the whole-collapse reduces (3103/3103 at
+  `n=3`, 370/370 at `n=4`; margin `W/mb ≤ 0.20`). The rigorous facts `P(1^n) ≤ mb` (the pattern
+  `1^n` contributes `P(1^n)` to *every* marginal) and the union bound `P(0^n) ≥ 1 − Σ_i bias_i ≥
+  1 − n·mb` are in hand, but the second bound degrades to `0` exactly at `mb = 1/n`, so it does not
+  by itself yield `P(1^n)/P(0^n) < √(mb/(1-mb))` at the boundary. (Empirically `mb` stays bounded
+  away from `1/n` on residuals — see Gap.)
+- *(B3-a) attempt.* A per-pattern sufficient condition `max_{ham(y)≠1} P(y) < G(O_1)` would force
+  `O* = O_1`, and it holds at n=4,5 — but it *fails* 3/26 at n=3 (a single weight-2 pattern can
+  exceed `G(O_1)` while the weight-2 *orbit geomean* still loses). So (B3-a) is genuinely a
+  geometric-mean-level (aggregate) fact, not a per-pattern one.
 
 ---
 
@@ -249,7 +312,10 @@ near `1/3` for `n=3`, margin `≥ 0.097`).
 
 ## Computational checks
 
-All run with `python3` (numpy + sympy) against the verified harness `/tmp/harness.py`.
+All run with `python3` (numpy + sympy) against the verified harness `harness.py` (in this
+directory). R3 scripts: `b3lib.py` (orbits / geomean / residual API), `fast_residual.py`
+(fast Bell-lattice residual test), `b3_certificate.py` (the B3-reduction certificate),
+`res_n{3,4,5}.pkl` (isolated residual datasets). Reproduce with `PYTHONPATH=. python3 b3_certificate.py`.
 
 ### Certificate suite (`/tmp/final_verify.py`)
 
@@ -296,52 +362,87 @@ ham(O*)/n < mb holds ONLY on the residual (n=3: 42/3707 general-case violations 
 n=4: 274/1891) — so Lemma B3 genuinely needs the residual hypothesis, which is exactly the gap.
 ```
 
+### R3 B3-reduction certificate (`b3_certificate.py`, `b3lib.py`, `fast_residual.py`)
+
+Residuals isolated by full Bell-lattice `k=2` search (`fast_is_residual_k2`, validated identical
+to the slow `all_k_partitions_search` and ~30× faster). For each residual, `O*` is found by
+geometric-mean maximization over all cyclic orbits (`ostar_info`). All checks at `err ~ 1e-16`.
+
+```
+                              (B3-a) O*=O_1   (B3-b) mb>1/n    TARGET ham(O*)/n<mb
+n=3   26 residuals            26/26           26/26            26/26   (min margin 0.0431)
+n=4   63 residuals            63/63           63/63            63/63   (min margin 0.0392)
+n=5    1 residual              1/1             1/1              1/1     (min margin 0.1098)
+spec  P=[.0352,.3315,.4299,.00033,.0545,.1069,.00028,.0415]:
+      residual, mb=0.4802, O*={e_i} (weight-1), ham(O*)/n=1/3 < mb.  (B3-a),(B3-b) hold.
+
+Strength of (B3-a): runner-up/winner orbit geomean ratio <= 0.0011 at n=4 (weight-1 dominates by
+                    ~1000x); 0.0008 at n=3.  Mass-concentration is extreme, not borderline.
+Strength of (B3-b): smallest observed (mb - 1/n) over residuals: 0.039 (n=4), 0.043 (n=3) — bounded
+                    away from 0, but the exact gap is not proven.
+Whole-collapse certificate for (B3-b)'s contrapositive: every tested P with mb<=1/n is reduced by
+                    the whole-collapse (n=3 3103/3103, n=4 370/370; W/mb <= 0.20).
+Dead-end re-attribution: orbit-vs-complement G(0^n)>=G(1^n) fails 21/26 (n=3) — IRRELEVANT singleton
+                    pair; the relevant weight-1>weight-2 comparison holds 26/26.
+```
+
+n=4 residuals — previously reported as "0 found" — DO exist (63 isolated here by a targeted hunt
+biasing mass toward weight-1 patterns with tiny `P(0^n)`); `O*` is the weight-1 orbit on ALL of
+them, refuting the R2-critic worry that an interior weight-2 orbit (`ham/n=0.5 ≥ mb`) could be the
+maximizer on a residual.
+
 ---
 
-## Gap
+## Gap (sharpened R3)
 
-**The proof is complete except for Lemma B3, stated precisely:**
+**The proof is complete except for Lemma B3, now reduced to two certified scalar sub-claims.**
+Given Lemma B3, the theorem is fully proved: by Lemma B2 some finite `k=mn` makes the cyclic-glue
+common marginal `b* < mb`, and that `k` with the cyclic `S` is the required construction; the
+non-residual is handled by the explicit `k=2` Rule-R loop / whole-collapse (Lemmas A1–A3, A3a,
+A3b), rigorous whenever it terminates with all marginals `< mb`. **The R3 reduction:**
 
-> **Lemma B3 (open).** Let `P` be full-support on `{0,1}^n` with `mb = maxbias(P) < 1/2`, and
-> suppose **no** `k=2` set-partition of the `2n` coordinates yields `maxbias(P') < mb` (the
-> residual). Let `G(O) = (Π_{y∈O} P(y))^{1/|O|}` be the geometric mean of `P` over a cyclic orbit
-> `O` under the shift `S`, and let `O*` maximize `G`. Then
-> ```
->     ( Σ_{O : G(O)=G(O*)} ham(O) ) / ( n · #{O : G(O)=G(O*)} )  <  mb ,
-> ```
-> i.e. the (tie-averaged) normalized Hamming weight of the dominant geometric-mean orbit is
-> strictly below `mb`.
+> **Lemma B3 (open) ⟸ (B3-a) ∧ (B3-b).** Let `P` be a residual (full support, `mb<1/2`, no `k=2`
+> set-partition of the `2n` coords reduces `maxbias`). Then
+> **(B3-a)** the weight-1 cyclic orbit `O_1 = {e_1,…,e_n}` is the unique maximizer of the orbit
+>   geometric mean `G(O) = (∏_{y∈O}P(y))^{1/|O|}`; equivalently, for every other orbit `O`,
+>   `(∏_{y∈O}P(y))^{1/|O|} < (∏_{i}P(e_i))^{1/n}`; hence `O* = O_1` and `ham(O*)/n = 1/n`.
+> **(B3-b)** `mb > 1/n`.
+> These give `ham(O*)/n = 1/n < mb` (no ties, so the tie-average is just `1/n`), which is Lemma B3.
 
-**What is established up to this point.** Given Lemma B3, the theorem is fully proved: by
-Lemma B2 some finite `k=mn` makes the cyclic-glue common marginal `b* < mb`, and that `k` with the
-cyclic `S` is the required construction; on the non-residual all instances are handled by the
-explicit `k=2` Rule R / whole-collapse (Lemmas A1–A3, A3a, A3b), which is rigorous and reduces
-`maxbias` whenever it terminates with all marginals `< mb`.
+**Status of the two sub-claims.** Both are TRUE with **zero violations** on every isolated residual
+(`n=3`: 26/26; `n=4`: 63/63 — n=4 residuals now exhibited, contradicting the earlier "0 found";
+`n=5`: 1/1; spec residual included), with margins `mb−1/n ≥ 0.039` and runner-up/winner orbit
+geomean `≤ 0.0011`. Each is an **aggregate** consequence of the full residual hypothesis (the
+conjunction of all `k=2`-partition failures); neither is yet reduced to a single signable
+polynomial-sign inequality. Concretely, the obstructions are:
 
-**Why the stated mechanism does not yet close B3.** The residual hypothesis ("no `k=2` partition
-reduces `mb`") is a conjunction of finitely many polynomial inequalities (one per partition of
-`2n`), and the conclusion is a statement about the geometric-mean-maximizing cyclic orbit. I
-verified numerically that the implication holds (0 violations on every residual instance found,
-with margin `≥ 0.097` at `n=3`), and that the conclusion is **false without** the residual
-hypothesis (so the hypothesis is genuinely load-bearing — counts above). But I could not derive
-the implication symbolically:
+- **(B3-a) is a geometric-mean-level fact, not per-pattern.** The clean per-pattern sufficient
+  condition `max_{ham(y)≠1} P(y) < G(O_1)` (which would force `O*=O_1`) holds at `n=4,5` but FAILS
+  3/26 at `n=3`: a single weight-2 pattern can exceed `G(O_1)` while the weight-2 *orbit geomean*
+  still loses. So one must control the geomean of each orbit, i.e. the joint of all its shifts —
+  the aggregate concentration content. (The recorded "orbit-vs-complement dead end" is NOT the
+  obstruction here: I re-checked it (`probe_ovc.py`) and it is the *singleton* pair `(0^n,1^n)`
+  whose order flips; the relevant weight-1 > weight-2 comparison holds on all residuals.)
 
-- The natural orbit-by-orbit rearrangement (pair each low-weight orbit `O` with its complement
-  `Ō`; hope `G(O) ≥ G(Ō)` when `ham(O) < n/2`) is **false even on the residual** — verified:
-  the orbit-dominance inequality `Π_{y∈O}P(y) ≥ Π_{y∈Ō}P(y)` is violated in 18/20 (`n=3`) and
-  5/6 (`n=4`) residual cases. So `b* < 1/2` (let alone `< mb`) is an aggregate weighted-average
-  fact, not a termwise one, and resists a direct rearrangement proof.
-- A clean structural lemma "residual ⇒ joint mass concentrates on a low-Hamming-weight orbit"
-  is the missing link. The chain "`k=2`-insufficiency ⟹ strong anti-correlation ⟹ low-weight
-  dominant orbit" is supported by all data but I have no proof that the *geometric-mean*
-  maximizer (as opposed to the arithmetic-mass maximizer) inherits the low weight.
+- **(B3-b) `mb>1/n` lacks a boundary-tight bound.** The contrapositive `mb≤1/n ⇒ not a residual`
+  is witnessed by the whole-collapse (reduces 3103/3103 at `n=3`, 370/370 at `n=4`). The rigorous
+  facts `P(1^n) ≤ mb` (pattern `1^n` contributes to every marginal) and the union bound
+  `P(0^n) ≥ 1 − Σ_i bias_i ≥ 1 − n·mb` are in hand, but the latter degrades to `0` exactly at
+  `mb=1/n`, so it does not yield the A3a threshold `P(1^n)/P(0^n) < √(mb/(1-mb))` at the boundary.
+  Residuals stay bounded away (`mb−1/n ≥ 0.039` observed), but the exact strict gap is unproven.
 
-**What would close it.** A proof of Lemma B3 — most plausibly by (a) showing the residual
-condition implies `P(x)` is, in a suitable majorization sense, dominated on high-Hamming-weight
-patterns by its low-weight counterparts strongly enough to force the geometric-mean maximizer to
-have `ham < n/2 · (mb/(1/2))`; or (b) replacing the cyclic backstop with a different residual
-move whose reduction is an explicit polynomial-sign condition analogous to Lemma A3a. Neither is
-in hand.
+**What would close it.** (i) A geomean-level concentration inequality: residual ⇒ for every cyclic
+orbit `O ≠ O_1`, `∏_{y∈O}P(y) < (∏_i P(e_i))^{|O|/n}` — the aggregate fact, now pinned to the
+specific orbit `O_1`. (ii) A boundary-tight lower bound on `P(0^n)` (sharper than the union bound)
+forcing the whole-collapse threshold whenever `mb ≤ 1/n`, OR any other rigorous proof of `mb>1/n`
+on residuals. Either of (i)+(ii) closes the theorem via Lemma B2; neither is in hand.
+
+**Honest status.** This is a precisely-stated, numerically-certified *scalar reduction* of B3 (the
+mechanism — cyclic geometric-mean limit, identified maximizer `O_1`, threshold `1/n` — is named;
+margins verified on all isolated `n=3` AND newly-hunted `n=4` residuals, plus `n=5` and the spec).
+It is NOT a proof of B3, and the theorem is NOT claimed proved. It strictly sharpens R1's open
+aggregate inequality `ham(O*)/n<mb` into two concrete scalar sub-claims and corrects the dead-end
+attribution.
 
 ---
 
@@ -355,11 +456,13 @@ in hand.
 | A2 diagonal odds-squaring `o↦o²`, `o<1` (only use of `mb<1/2`) | PROVED (symbolic) |
 | A3 absorb-block closed form | PROVED + VERIFIED |
 | A3a block contraction polynomial condition; whole-collapse | PROVED |
-| A3b absorbing removes the riser reweighting | PROVED |
+| A3b Rule-R loop (reworded R3: loop, not single absorption; absorption not coord-monotone) | PROVED |
 | Rule R termination + correctness when it stops below `mb` | PROVED (not universal) |
 | B1 cyclic equal-marginals + orbit formula | PROVED + VERIFIED |
 | B2 geometric-mean limit `b*_{mn} → ham(O*)/n` | PROVED + VERIFIED |
-| **B3 residual ⇒ ham(O*)/n < mb** | **OPEN (the single gap)** |
+| **B3 ⟸ (B3-a) ∧ (B3-b) [the R3 reduction]** | **PROVED (trivial: `1/n < mb`)** |
+| **(B3-a) residual ⇒ `O* =` weight-1 orbit `O_1` (`ham(O*)/n = 1/n`)** | **OPEN — certified 90/90 residuals, n=3,4,5** |
+| **(B3-b) residual ⇒ `mb > 1/n`** | **OPEN — certified 90/90 residuals, n=3,4,5** |
 
 Combined construction (best `k=2` partition else `k=mn` cyclic): **0 failures** over 30,000+
 adversarial/near-boundary/residual instances (`n=2,3,4`), so the theorem is almost certainly
